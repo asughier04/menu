@@ -1,521 +1,576 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منيو مطعم لاقونا | Laguna Menu</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Rakkas&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --teal-deep: #0a3538;
-            --teal: #0f4548;
-            --green: #1fa14b;
-            --green-deep: #167a39;
-            --sand: #f6f1e3;
-            --sand-dark: #ece3cd;
-            --card: #ffffff;
-            --ink: #182726;
-            --muted: #6d7c7a;
-            --coral: #ff6b4a;
-            --coral-deep: #e6522e;
-            --gold: #cf9a42;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منيو مطعم لاقونا | Laguna Menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&family=Anton&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#f2ede1;
+    --cream-2:#e9e2d0;
+    --ink:#2a2420;
+    --line:#2a2420;
+    --white:#fffdf8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(circle at 8% 92%, rgba(42,36,32,0.05), transparent 35%),
+      radial-gradient(circle at 95% 6%, rgba(42,36,32,0.05), transparent 35%);
+  }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Cairo', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+  /* ---------------- HERO ---------------- */
+  .hero{
+    padding:22px 20px 14px;
+    max-width:640px;
+    margin:0 auto;
+  }
+  .hero-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .wordmark{
+    font-family:'Baloo Bhaijaan 2', sans-serif;
+    font-weight:800;
+    font-size:1.5rem;
+    letter-spacing:0.5px;
+    border:3px solid var(--ink);
+    padding:6px 14px;
+    border-radius:10px;
+    background:var(--white);
+    transform:rotate(-2deg);
+  }
+  .doodle-face{width:52px;height:52px;flex-shrink:0;}
+  .hero-menu{
+    font-family:'Anton', sans-serif;
+    font-size:clamp(3.4rem,18vw,5.2rem);
+    line-height:0.85;
+    letter-spacing:2px;
+    margin-top:6px;
+    text-align:left;
+    direction:ltr;
+  }
+  .hero-tag{
+    font-weight:700;
+    font-size:0.85rem;
+    color:var(--ink);
+    opacity:0.7;
+    margin-top:6px;
+  }
 
-        html { scroll-behavior: smooth; }
+  /* ---------------- SEARCH ---------------- */
+  .search-wrap{
+    max-width:640px;
+    margin:10px auto 0;
+    padding:0 20px;
+    position:relative;
+  }
+  .search-box{
+    width:100%;
+    background:var(--white);
+    border:3px solid var(--ink);
+    border-radius:999px;
+    padding:12px 46px 12px 18px;
+    font-size:0.92rem;
+    font-weight:600;
+    color:var(--ink);
+    outline:none;
+  }
+  .search-box::placeholder{color:#8a8175;}
+  .search-icon{position:absolute;left:38px;top:50%;transform:translateY(-50%);font-size:1rem;opacity:0.7;}
 
-        body {
-            background-color: var(--sand);
-            color: var(--ink);
-            padding-bottom: 60px;
-            background-image:
-                radial-gradient(circle at 15% 8%, rgba(31,161,75,0.06), transparent 40%),
-                radial-gradient(circle at 90% 15%, rgba(255,107,74,0.06), transparent 35%);
-        }
+  /* ---------------- CATEGORY CHIPS (quick jump) ---------------- */
+  .chip-row{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding:16px 20px 4px;
+    max-width:640px;
+    margin:0 auto;
+  }
+  .chip-row::-webkit-scrollbar{display:none;}
+  .chip{
+    flex-shrink:0;
+    border:2.5px solid var(--ink);
+    background:var(--white);
+    border-radius:999px;
+    padding:7px 14px;
+    font-weight:700;
+    font-size:0.78rem;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    cursor:pointer;
+    transition:0.2s;
+  }
+  .chip.active{background:var(--ink);color:var(--cream);}
 
-        /* --- Header --- */
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: linear-gradient(155deg, var(--teal-deep) 0%, var(--teal) 65%, var(--green-deep) 130%);
-            text-align: center;
-            padding: 30px 20px 40px;
-        }
+  /* ---------------- CAROUSEL ---------------- */
+  .pages-container{
+    display:flex;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+    margin-top:10px;
+  }
+  .pages-container::-webkit-scrollbar{display:none;}
 
-        .brand-mark {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
+  .menu-page{
+    min-width:100%;
+    scroll-snap-align:start;
+    padding:10px 20px 40px;
+    max-width:640px;
+    margin:0 auto;
+  }
 
-        .brand-name {
-            font-family: 'Rakkas', serif;
-            font-size: clamp(2.2rem, 8vw, 2.8rem);
-            color: #f6f1e3;
-            letter-spacing: 1px;
-            line-height: 1;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.25);
-        }
+  .page-title-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .page-badge{
+    width:46px;height:46px;border-radius:50%;
+    border:3px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.4rem;background:var(--white);flex-shrink:0;
+  }
+  .page-title{
+    font-family:'Baloo Bhaijaan 2', sans-serif;
+    font-weight:800;
+    font-size:1.5rem;
+  }
+  .page-count{
+    margin-right:auto;
+    font-size:0.72rem;
+    font-weight:700;
+    border:2px solid var(--ink);
+    border-radius:999px;
+    padding:3px 10px;
+    background:var(--white);
+  }
 
-        .brand-sub {
-            font-size: 0.72rem;
-            letter-spacing: 4px;
-            color: #a9d8bd;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
+  /* ---------------- ITEM ---------------- */
+  .item{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:46px;
+    position:relative;
+  }
+  .item.flip{flex-direction:row-reverse;}
 
-        .brand-rule {
-            width: 46px;
-            height: 3px;
-            background: var(--coral);
-            border-radius: 3px;
-            margin-top: 10px;
-        }
+  .item-visual{
+    position:relative;
+    width:38%;
+    max-width:170px;
+    aspect-ratio:1/1;
+    flex-shrink:0;
+  }
+  .blob-svg{position:absolute;inset:-14%;width:128%;height:128%;}
+  .item-icon-wrap{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .item-icon-wrap svg{width:46%;height:46%;filter:drop-shadow(0 3px 4px rgba(0,0,0,0.2));}
 
-        .header-wave {
-            display: block;
-            width: 100%;
-            height: 34px;
-            margin-bottom: -1px;
-        }
+  .starburst{
+    position:absolute;
+    width:64px;height:64px;
+  }
+  .starburst svg{width:100%;height:100%;}
+  .starburst-price{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    flex-direction:column;
+    color:var(--white);
+    font-family:'Anton', sans-serif;
+    font-size:0.95rem;
+    line-height:1;
+    direction:ltr;
+  }
+  .starburst-price small{font-size:0.5rem;font-weight:700;margin-top:1px;}
 
-        /* --- Search --- */
-        .search-wrap {
-            max-width: 600px;
-            margin: -22px auto 0;
-            padding: 0 16px;
-            position: relative;
-            z-index: 20;
-        }
+  .item.pos-a .starburst{top:-10px;left:-14px;}
+  .item.pos-b .starburst{bottom:-10px;right:-14px;}
 
-        .search-box {
-            width: 100%;
-            background: var(--card);
-            border: none;
-            border-radius: 14px;
-            padding: 14px 46px 14px 16px;
-            font-size: 0.95rem;
-            font-family: 'Cairo', sans-serif;
-            color: var(--ink);
-            box-shadow: 0 8px 20px rgba(10,53,56,0.18);
-            outline: none;
-            transition: box-shadow 0.25s;
-        }
+  .item-content{flex:1;min-width:0;}
 
-        .search-box:focus {
-            box-shadow: 0 8px 24px rgba(10,53,56,0.28), 0 0 0 2px var(--green);
-        }
+  .pill-row{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:8px;
+  }
+  .item.flip .pill-row{flex-direction:row-reverse;}
+  .sparkle{width:14px;height:14px;flex-shrink:0;opacity:0.85;}
+  .pill{
+    font-family:'Baloo Bhaijaan 2', sans-serif;
+    font-weight:700;
+    font-size:0.92rem;
+    border:2.5px solid var(--ink);
+    border-radius:999px;
+    padding:6px 14px;
+    background:var(--white);
+    display:inline-block;
+    line-height:1.2;
+  }
+  .item-desc{
+    font-size:0.8rem;
+    color:#4a423b;
+    line-height:1.55;
+    max-width:95%;
+  }
 
-        .search-icon {
-            position: absolute;
-            left: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.1rem;
-            opacity: 0.45;
-            pointer-events: none;
-        }
+  /* ---------------- PAGER ---------------- */
+  .pager{
+    position:fixed;
+    bottom:14px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--ink);
+    padding:8px 10px;
+    border-radius:999px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.25);
+    z-index:200;
+  }
+  .pager-btn{
+    width:30px;height:30px;
+    border-radius:50%;
+    border:none;
+    background:var(--cream);
+    color:var(--ink);
+    font-size:1rem;
+    font-weight:800;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .dots{display:flex;gap:5px;padding:0 4px;}
+  .dot{width:6px;height:6px;border-radius:50%;background:#6b6156;transition:0.2s;}
+  .dot.active{background:var(--cream);width:16px;border-radius:4px;}
 
-        /* --- Category Navigation --- */
-        .category-nav {
-            display: flex;
-            overflow-x: auto;
-            gap: 8px;
-            padding: 18px 16px 8px;
-            max-width: 600px;
-            margin: 0 auto;
-            scroll-behavior: smooth;
-        }
+  /* ---------------- SEARCH RESULTS ---------------- */
+  .search-results{
+    max-width:640px;margin:14px auto 60px;padding:0 20px;
+    display:none;
+  }
+  .search-results.show{display:block;}
+  .pages-container.hide{display:none;}
+  .chip-row.hide{display:none;}
+  .pager.hide{display:none;}
 
-        .category-nav::-webkit-scrollbar { display: none; }
+  .sr-item{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:10px;background:var(--white);border:2.5px solid var(--ink);
+    border-radius:14px;padding:12px 14px;margin-bottom:10px;
+  }
+  .sr-name{font-weight:800;font-size:0.92rem;}
+  .sr-desc{font-size:0.75rem;color:#5a524a;margin-top:2px;}
+  .sr-price{
+    font-family:'Anton', sans-serif;
+    background:var(--ink);color:var(--cream);
+    border-radius:999px;padding:6px 12px;font-size:0.85rem;flex-shrink:0;
+    direction:ltr;
+  }
+  .no-results{text-align:center;padding:50px 20px;color:#6b6156;font-weight:700;}
 
-        .category-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--card);
-            border: 1px solid var(--sand-dark);
-            color: var(--teal-deep);
-            padding: 9px 16px;
-            border-radius: 999px;
-            white-space: nowrap;
-            font-weight: 600;
-            font-size: 0.88rem;
-            cursor: pointer;
-            transition: 0.25s;
-            flex-shrink: 0;
-        }
-
-        .category-btn .icon { font-size: 1rem; }
-
-        .category-btn.active {
-            background: var(--green);
-            color: #fff;
-            border-color: var(--green);
-            box-shadow: 0 6px 14px rgba(31,161,75,0.3);
-        }
-
-        /* --- Menu Content --- */
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 10px 16px 0;
-        }
-
-        .category-section {
-            margin-bottom: 30px;
-            display: none;
-            animation: fadeIn 0.35s ease-in-out;
-        }
-
-        .category-section.active,
-        .category-section.force-show {
-            display: block;
-        }
-
-        .section-title-row {
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-            margin-bottom: 16px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--sand-dark);
-        }
-
-        .section-title {
-            font-family: 'Rakkas', serif;
-            color: var(--teal-deep);
-            font-size: 1.55rem;
-        }
-
-        .section-count {
-            font-size: 0.75rem;
-            color: var(--muted);
-            font-weight: 600;
-            background: var(--sand-dark);
-            padding: 2px 10px;
-            border-radius: 999px;
-            margin-right: auto;
-        }
-
-        .menu-item {
-            background: var(--card);
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 2px 10px rgba(10,53,56,0.06);
-            border-right: 4px solid transparent;
-            transition: 0.25s;
-        }
-
-        .menu-item:hover {
-            border-right-color: var(--coral);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 18px rgba(10,53,56,0.1);
-        }
-
-        .item-info { flex: 1; min-width: 0; }
-
-        .item-name {
-            font-size: 1.05rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: var(--teal-deep);
-        }
-
-        .item-desc {
-            font-size: 0.83rem;
-            color: var(--muted);
-            line-height: 1.5;
-        }
-
-        .item-price {
-            font-size: 1.05rem;
-            font-weight: 800;
-            color: var(--coral-deep);
-            background: #fff0eb;
-            padding: 7px 14px;
-            border-radius: 10px;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .item-price::after {
-            content: ' د.ل';
-            font-size: 0.68rem;
-            font-weight: 600;
-            opacity: 0.75;
-        }
-
-        .no-results {
-            text-align: center;
-            color: var(--muted);
-            padding: 50px 20px;
-            font-size: 0.95rem;
-            display: none;
-        }
-
-        .no-results.show { display: block; }
-
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            padding: 24px 16px 6px;
-            color: var(--muted);
-            font-size: 0.85rem;
-        }
-
-        footer .foot-brand {
-            font-family: 'Rakkas', serif;
-            color: var(--teal-deep);
-            font-size: 1.1rem;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            * { animation: none !important; transition: none !important; }
-        }
-    </style>
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;}}
+</style>
 </head>
 <body>
 
-    <header>
-        <div class="brand-mark">
-            <span class="brand-name">لاقونا</span>
-            <span class="brand-sub">LAGUNA RESTAURANT</span>
-            <div class="brand-rule"></div>
-        </div>
-        <!-- لإضافة شعاركم الفعلي: استبدلوا brand-mark أعلاه بـ <img src="اسم-الملف.png" class="logo"> بعد رفع الصورة -->
-    </header>
-    <svg class="header-wave" viewBox="0 0 600 34" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,0 C100,34 200,0 300,17 C400,34 500,0 600,17 L600,34 L0,34 Z" fill="#f6f1e3"></path>
+<div class="hero">
+  <div class="hero-top">
+    <span class="wordmark">لاقونا</span>
+    <svg class="doodle-face" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 24 Q14 16 20 20" stroke="#2a2420" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M38 20 Q44 16 48 24" stroke="#2a2420" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="18" cy="30" rx="4" ry="6" fill="#2a2420"/>
+      <ellipse cx="42" cy="30" rx="4" ry="6" fill="#2a2420"/>
+      <path d="M14 42 Q30 54 46 42" stroke="#2a2420" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     </svg>
+  </div>
+  <h1 class="hero-menu">MENU</h1>
+  <p class="hero-tag">قائمة الطعام الكاملة &mdash; لاقونا رستورانت</p>
+</div>
 
-    <div class="search-wrap">
-        <input type="text" class="search-box" id="search-input" placeholder="ابحث عن صنف... (بيتزا، برجر، سلطة)">
-        <span class="search-icon">🔍</span>
+<div class="search-wrap">
+  <input type="text" class="search-box" id="search-input" placeholder="ابحث عن صنف...">
+  <span class="search-icon">🔍</span>
+</div>
+
+<div class="chip-row" id="chip-row"></div>
+
+<div class="pages-container" id="pages-container"></div>
+
+<div class="search-results" id="search-results"></div>
+<p class="no-results" id="no-results" style="display:none;">لا توجد أصناف مطابقة لبحثك 🍽️</p>
+
+<div class="pager" id="pager">
+  <button class="pager-btn" id="prev-btn" aria-label="السابق">›</button>
+  <div class="dots" id="dots"></div>
+  <button class="pager-btn" id="next-btn" aria-label="التالي">‹</button>
+</div>
+
+<script>
+/* ============== ICONS (illustrative placeholders per category — swap for real photos anytime) ============== */
+const categoryIcons = {
+  pizza: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32 6 L58 54 L6 54 Z" fill="#f2c14e"/><circle cx="26" cy="30" r="3.5" fill="#c1502f"/><circle cx="38" cy="26" r="3" fill="#c1502f"/><circle cx="32" cy="40" r="3.2" fill="#c1502f"/><path d="M6 54 L58 54 L54 60 L10 60 Z" fill="#e8dcb8"/></svg>`,
+  pastry: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M8 34 C16 18 26 12 32 20 C38 12 48 18 56 34 C48 28 40 32 32 28 C24 32 16 28 8 34Z" fill="#e0a84a"/><path d="M10 36 C20 30 44 30 54 36" stroke="#a8672a" stroke-width="2" fill="none"/></svg>`,
+  sandwich: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="26" width="44" height="10" rx="4" fill="#7ea24a"/><path d="M8 26 Q32 10 56 26 L52 22 Q32 10 12 22Z" fill="#e0a84a"/><rect x="10" y="36" width="44" height="9" rx="3" fill="#e0a84a"/></svg>`,
+  crown: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M10 44 L14 22 L26 34 L32 18 L38 34 L50 22 L54 44Z" fill="#eea23c"/><rect x="10" y="44" width="44" height="8" rx="2" fill="#c97f1f"/><circle cx="14" cy="20" r="3" fill="#c1502f"/><circle cx="32" cy="15" r="3" fill="#c1502f"/><circle cx="50" cy="20" r="3" fill="#c1502f"/></svg>`,
+  burger: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M8 26 Q32 8 56 26Z" fill="#e0a84a"/><rect x="8" y="28" width="48" height="6" rx="3" fill="#7ea24a"/><rect x="8" y="35" width="48" height="7" rx="2" fill="#a8672a"/><rect x="8" y="43" width="48" height="7" rx="3" fill="#e0a84a"/></svg>`,
+  skewer: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="52" x2="56" y2="12" stroke="#c97f1f" stroke-width="3"/><rect x="16" y="30" width="12" height="12" rx="2" fill="#c1502f" transform="rotate(-38 22 36)"/><rect x="27" y="21" width="12" height="12" rx="2" fill="#a8672a" transform="rotate(-38 33 27)"/><rect x="38" y="12" width="12" height="12" rx="2" fill="#c1502f" transform="rotate(-38 44 18)"/></svg>`,
+  drumstick: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M20 14 C10 20 10 34 22 38 C18 46 22 54 30 52 C40 50 44 40 54 30 C48 18 34 8 20 14Z" fill="#e0a84a"/><circle cx="46" cy="24" r="7" fill="#e0a84a"/></svg>`,
+  salad: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M8 30 A24 20 0 0 0 56 30Z" fill="#c97f1f"/><path d="M10 30 A22 18 0 0 0 54 30Z" fill="#7ea24a"/><circle cx="24" cy="26" r="3" fill="#c1502f"/><circle cx="38" cy="24" r="3" fill="#e8dcb8"/><circle cx="32" cy="30" r="3" fill="#c1502f"/></svg>`
+};
+
+const sparkleSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z" fill="#2a2420"/></svg>`;
+
+const blobPaths = [
+  "M100,10 C140,5 180,30 185,70 C190,110 170,150 130,170 C90,190 40,180 20,140 C0,100 10,50 50,25 C65,15 82,12 100,10 Z",
+  "M90,15 C130,0 170,25 180,60 C195,100 175,145 140,165 C100,190 50,180 25,145 C0,110 15,60 55,35 C65,28 78,20 90,15 Z",
+  "M95,8 C135,15 175,45 178,85 C181,120 155,155 118,172 C80,188 35,172 15,138 C-3,105 5,58 40,30 C57,17 76,4 95,8 Z"
+];
+
+const palette = ['#c1502f','#c98a1f','#1f8a4c','#5b3a8a','#1f7a8c','#8a4b2f','#b23a5e','#3a6b8a'];
+
+function starburstPoints(spikes, outerR, innerR, cx, cy){
+  let pts = [];
+  const step = Math.PI / spikes;
+  for(let i=0;i<spikes*2;i++){
+    const r = i % 2 === 0 ? outerR : innerR;
+    const angle = i * step - Math.PI/2;
+    pts.push(`${(cx + r*Math.cos(angle)).toFixed(1)},${(cy + r*Math.sin(angle)).toFixed(1)}`);
+  }
+  return pts.join(' ');
+}
+const starburstPolygon = starburstPoints(13, 48, 35, 50, 50);
+
+/* ============== DATA ============== */
+const menuData = [
+  { category:"بيتزا - حجم كبير", icon:"🍕", art:"pizza", items:[
+    { name:"بيتزا مارغريتا", desc:"صلصة + طماطم + جبنة", price:"19" },
+    { name:"بيتزا خضروات", desc:"صلصة فلفل حلو ألوان + طماطم + فقاع", price:"22" },
+    { name:"بيتزا الأجبان الأربعة", desc:"أربع أنواع من الجبنة + صلصة", price:"27" },
+    { name:"بيتزا مفروم لحم", desc:"لحم مفروم متبل + طماطم + جبنة + فلفل حلو", price:"27" },
+    { name:"بيتزا دجاج", desc:"دجاج متبل + فلفل حلو + طماطم + جبنة + صلصة", price:"27" },
+    { name:"بيتزا مرقاز", desc:"قطع مرقاز + زيتون أسود + صوص باربيكيو + جبنة", price:"30" },
+    { name:"بيتزا كباب لحم", desc:"سيخ كباب + زيتون + طماطم + جبنة", price:"30" },
+    { name:"بيتزا سلامي", desc:"شرائح سلامي + فلفل حلو + صلصة طماطم + جبنة", price:"28" },
+    { name:"بيتزا موجة حارة", desc:"دجاج متبل حار + فلفل حار + صلصة طماطم + جبنة", price:"27" },
+    { name:"بيتزا سموكي", desc:"شرائح سلامي + دجاج مشوي مدخن + صلصة طماطم + جبنة + فلفل حلو", price:"29" }
+  ]},
+  { category:"المعجنات", icon:"🥐", art:"pastry", items:[
+    { name:"مقلوبة دجاج", desc:"دجاج + بطاطا + أجبان + صوص + كاتشب", price:"19" },
+    { name:"مقلوبة لحم", desc:"لحم مفروم + بطاطا + أجبان + صوص + كاتشب", price:"20" },
+    { name:"مقلوبة كبدة عجل", desc:"لحم مفروم + بطاطا + أجبان + صوص", price:"27" },
+    { name:"باقيت دجاج", desc:"دجاج + جبنة + بطاطا + صوصات", price:"22" },
+    { name:"باقيت لحم", desc:"لحم مفروم + جبنة + بطاطا + صوصات", price:"24" },
+    { name:"باقيت كبدة عجل", desc:"كبدة + جبنة + بطاطا + صوصات", price:"28" },
+    { name:"كبدة فرن", desc:"كبدة + جبنة + بطاطا + صوصات", price:"28" },
+    { name:"فاهيتا فرن", desc:"فاهيتا + جبنة + بطاطا + صوصات", price:"23" }
+  ]},
+  { category:"سندوتشات", icon:"🥪", art:"sandwich", items:[
+    { name:"تشكن فيليه", desc:"شريحة دجاج مشوية + خس + طماطم + صوص", price:"15" },
+    { name:"تشكن لاقونا", desc:"شريحة دجاج مشوية مع قطع الدجاج + الخضار", price:"22" },
+    { name:"تشكن كرانش", desc:"شريحة دجاج كرسبي + خس + طماطم + صوص التاكسس", price:"16" },
+    { name:"كباب دجاج", desc:"سيخ كباب دجاج + خس + طماطم + معدنوس", price:"14" },
+    { name:"كفتة لحم بالجبنة", desc:"2 قطع كفتة محشوة جبن + صوص + مايونيز", price:"15" },
+    { name:"تشكن فاهيتا", desc:"قطع مشوية + صوص الفاهيتا + جبنة شرائح", price:"14" },
+    { name:"كبدة اسكندراني", desc:"قطع كبدة متبلة ومشوية مع المايونيز", price:"20" },
+    { name:"تشكن لودر", desc:"شريحة دجاج مقرمش + فلفل مخلل + صوص الساموراي", price:"17" },
+    { name:"طابونة دجاج", desc:"قطع دجاج مشوية + زيتون شرائح + صوص", price:"14" },
+    { name:"طابونة كبدة", desc:"قطع كبدة مشوية + بصل + صوص + جبنة", price:"20" }
+  ]},
+  { category:"سندوتشات VIP", icon:"👑", art:"crown", items:[
+    { name:"تشكن سموكي", desc:"شريحتين دجاج مشوي بخبز التورتيلا + صوص السموكي", price:"22" },
+    { name:"تشكن كرسبي", desc:"شريحتين دجاج كرسبي بخبز التورتيلا يصنع في الفرن", price:"26" },
+    { name:"سبيشل تشكن", desc:"دجاج مقرمش تورتيلا + جبنة شرائح + خس + كاتشب", price:"17" }
+  ]},
+  { category:"برجر", icon:"🍔", art:"burger", items:[
+    { name:"كلاسيك برجر لحم", desc:"شريحة لحم + خس + طماطم + صوص جبنة", price:"15" },
+    { name:"برجر دجاج", desc:"شريحة دجاج مفروم + خس + طماطم + صوص", price:"14" },
+    { name:"برجر دجاج دبل", desc:"شريحتين دجاج + خس + طماطم + صوص", price:"20" },
+    { name:"برجر لحم دبل", desc:"شريحتين لحم + خس + طماطم + صوص", price:"17" },
+    { name:"برجر ديلوكس", desc:"شريحة برجر لحم وطني + فقاع + صوص ديلوكس", price:"20" },
+    { name:"إسكالوب", desc:"شرائح دجاج مقلي + بطاطا + صوص جبنة", price:"15" }
+  ]},
+  { category:"وجبات مشوية", icon:"🍢", art:"skewer", items:[
+    { name:"فيلي دجاج", desc:"2 شريحة دجاج + أرز + بطاطا + سلاطة", price:"32" },
+    { name:"وجبة شيش طاووق", desc:"2 سيخ دجاج + بطاطا + سلاطة", price:"32" },
+    { name:"وجبة كباب دجاج / لحم", desc:"2 سيخ كباب + أرز + بطاطا + سلاطة", price:"30" },
+    { name:"مكس كباب", desc:"سيخ كباب + سيخ دجاج + أرز + بطاطا", price:"32" },
+    { name:"فخد دجاج مسحب", desc:"2 فخد دجاج + أرز + بطاطا + سلاطة", price:"33" },
+    { name:"كبدة اسكندراني عجل", desc:"كبدة اسكندراني + أرز + بطاطا + سلاطة", price:"50" },
+    { name:"نص دجاجة مشوية", desc:"نص دجاجة مشوية + أرز + بطاطا + سلاطة", price:"33" },
+    { name:"مشاوي لاقونا", desc:"2 سيخ كبدة + 2 كباب + 2 فيلي + 2 كفتة + مرقاز", price:"270" }
+  ]},
+  { category:"وجبات كنتاكي وستربس", icon:"🍗", art:"drumstick", items:[
+    { name:"وجبة كنتاكي 3 قطع", desc:"3 قطع دجاج + أرز + بطاطا + كول سلو + صوص", price:"30" },
+    { name:"وجبة كنتاكي 6 قطع", desc:"6 قطع دجاج + أرز + بطاطا + كول سلو + صوص", price:"55" },
+    { name:"وجبة ستربس 5 قطع", desc:"5 قطع ستربس + أرز + بطاطا + كول سلو + صوص", price:"30" },
+    { name:"وجبة ستربس 10 قطع", desc:"10 قطع ستربس + أرز + بطاطا + كول سلو + صوص", price:"55" }
+  ]},
+  { category:"سلطات ومقبلات", icon:"🥗", art:"salad", items:[
+    { name:"شوربة عدس / حلقات بصل", desc:"مقبلات", price:"5" },
+    { name:"بطاطا متوسطة / أصابع الجبنة", desc:"مقبلات", price:"10" },
+    { name:"ناتشوز ببطاطا", desc:"مقبلات", price:"17" },
+    { name:"سلطة بابا غنوج / مشوية", desc:"سلطات طازجة", price:"10" },
+    { name:"سلطة الطماطم المتبل", desc:"سلطات طازجة", price:"19" },
+    { name:"سلطة مشكل", desc:"تشكيلة سلطات", price:"25" }
+  ]}
+];
+
+/* ============== BUILD ============== */
+const chipRow = document.getElementById('chip-row');
+const pagesContainer = document.getElementById('pages-container');
+const dotsWrap = document.getElementById('dots');
+
+menuData.forEach((cat, ci) => {
+  const accent = palette[ci % palette.length];
+
+  // chip
+  const chip = document.createElement('div');
+  chip.className = `chip ${ci===0?'active':''}`;
+  chip.innerHTML = `<span>${cat.icon}</span><span>${cat.category}</span>`;
+  chip.onclick = () => goToPage(ci);
+  chipRow.appendChild(chip);
+
+  // dot
+  const dot = document.createElement('div');
+  dot.className = `dot ${ci===0?'active':''}`;
+  dotsWrap.appendChild(dot);
+
+  // page
+  const page = document.createElement('div');
+  page.className = 'menu-page';
+  page.innerHTML = `
+    <div class="page-title-row">
+      <div class="page-badge" style="border-color:${accent};color:${accent};">${cat.icon}</div>
+      <h2 class="page-title" style="color:${accent};">${cat.category}</h2>
+      <span class="page-count">${cat.items.length} صنف</span>
     </div>
+  `;
 
-    <nav class="category-nav" id="nav-container"></nav>
+  cat.items.forEach((item, i) => {
+    const flip = i % 2 === 1;
+    const posClass = i % 2 === 0 ? 'pos-a' : 'pos-b';
+    const blob = blobPaths[i % blobPaths.length];
+    const rotation = (i % 2 === 0 ? -6 : 5) + (i % 3) * 4;
 
-    <div class="container" id="menu-container"></div>
-    <p class="no-results" id="no-results">لا توجد أصناف مطابقة لبحثك 🍽️</p>
+    const el = document.createElement('div');
+    el.className = `item ${flip ? 'flip':''} ${posClass}`;
+    el.dataset.search = (item.name + ' ' + item.desc).toLowerCase();
+    el.innerHTML = `
+      <div class="item-visual" style="transform:rotate(${rotation}deg);">
+        <svg class="blob-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <path d="${blob}" fill="${accent}" opacity="0.9"></path>
+        </svg>
+        <div class="item-icon-wrap" style="transform:rotate(${-rotation}deg);">${categoryIcons[cat.art]}</div>
+        <div class="starburst">
+          <svg viewBox="0 0 100 100"><polygon points="${starburstPolygon}" fill="var(--ink)"/></svg>
+          <div class="starburst-price">${item.price}<small>د.ل</small></div>
+        </div>
+      </div>
+      <div class="item-content">
+        <div class="pill-row">
+          <span class="sparkle">${sparkleSVG}</span>
+          <span class="pill">${item.name}</span>
+          <span class="sparkle">${sparkleSVG}</span>
+        </div>
+        <p class="item-desc">${item.desc}</p>
+      </div>
+    `;
+    page.appendChild(el);
+  });
 
-    <footer>
-        <span class="foot-brand">لاقونا</span>
-        بالهناء والشفاء
-    </footer>
+  pagesContainer.appendChild(page);
+});
 
-    <script>
-        // --- قاعدة بيانات المنيو ---
-        const menuData = [
-            {
-                category: "بيتزا - حجم كبير",
-                icon: "🍕",
-                items: [
-                    { name: "بيتزا مارغريتا", desc: "صلصة + طماطم + جبنة", price: "19" },
-                    { name: "بيتزا خضروات", desc: "صلصة فلفل حلو ألوان + طماطم + فقاع", price: "22" },
-                    { name: "بيتزا الأجبان الأربعة", desc: "أربع أنواع من الجبنة + صلصة", price: "27" },
-                    { name: "بيتزا مفروم لحم", desc: "لحم مفروم متبل + طماطم + جبنة + فلفل حلو", price: "27" },
-                    { name: "بيتزا دجاج", desc: "دجاج متبل + فلفل حلو + طماطم + جبنة + صلصة", price: "27" },
-                    { name: "بيتزا مرقاز", desc: "قطع مرقاز + زيتون أسود + صوص باربيكيو + جبنة", price: "30" },
-                    { name: "بيتزا كباب لحم", desc: "سيخ كباب + زيتون + طماطم + جبنة", price: "30" },
-                    { name: "بيتزا سلامي", desc: "شرائح سلامي + فلفل حلو + صلصة طماطم + جبنة", price: "28" },
-                    { name: "بيتزا موجة حارة", desc: "دجاج متبل حار + فلفل حار + صلصة طماطم + جبنة", price: "27" },
-                    { name: "بيتزا سموكي", desc: "شرائح سلامي + دجاج مشوي مدخن + صلصة طماطم + جبنة + فلفل حلو", price: "29" }
-                ]
-            },
-            {
-                category: "المعجنات",
-                icon: "🥐",
-                items: [
-                    { name: "مقلوبة دجاج", desc: "دجاج + بطاطا + أجبان + صوص + كاتشب", price: "19" },
-                    { name: "مقلوبة لحم", desc: "لحم مفروم + بطاطا + أجبان + صوص + كاتشب", price: "20" },
-                    { name: "مقلوبة كبدة عجل", desc: "لحم مفروم + بطاطا + أجبان + صوص", price: "27" },
-                    { name: "باقيت دجاج", desc: "دجاج + جبنة + بطاطا + صوصات", price: "22" },
-                    { name: "باقيت لحم", desc: "لحم مفروم + جبنة + بطاطا + صوصات", price: "24" },
-                    { name: "باقيت كبدة عجل", desc: "كبدة + جبنة + بطاطا + صوصات", price: "28" },
-                    { name: "كبدة فرن", desc: "كبدة + جبنة + بطاطا + صوصات", price: "28" },
-                    { name: "فاهيتا فرن", desc: "فاهيتا + جبنة + بطاطا + صوصات", price: "23" }
-                ]
-            },
-            {
-                category: "سندوتشات",
-                icon: "🥪",
-                items: [
-                    { name: "تشكن فيليه", desc: "شريحة دجاج مشوية + خس + طماطم + صوص", price: "15" },
-                    { name: "تشكن لاقونا", desc: "شريحة دجاج مشوية مع قطع الدجاج + الخضار", price: "22" },
-                    { name: "تشكن كرانش", desc: "شريحة دجاج كرسبي + خس + طماطم + صوص التاكسس", price: "16" },
-                    { name: "كباب دجاج", desc: "سيخ كباب دجاج + خس + طماطم + معدنوس", price: "14" },
-                    { name: "كفتة لحم بالجبنة", desc: "2 قطع كفتة محشوة جبن + صوص + مايونيز", price: "15" },
-                    { name: "تشكن فاهيتا", desc: "قطع مشوية + صوص الفاهيتا + جبنة شرائح", price: "14" },
-                    { name: "كبدة اسكندراني", desc: "قطع كبدة متبلة ومشوية مع المايونيز", price: "20" },
-                    { name: "تشكن لودر", desc: "شريحة دجاج مقرمش + فلفل مخلل + صوص الساموراي", price: "17" },
-                    { name: "طابونة دجاج", desc: "قطع دجاج مشوية + زيتون شرائح + صوص", price: "14" },
-                    { name: "طابونة كبدة", desc: "قطع كبدة مشوية + بصل + صوص + جبنة", price: "20" }
-                ]
-            },
-            {
-                category: "سندوتشات VIP",
-                icon: "👑",
-                items: [
-                    { name: "تشكن سموكي", desc: "شريحتين دجاج مشوي بخبز التورتيلا + صوص السموكي", price: "22" },
-                    { name: "تشكن كرسبي", desc: "شريحتين دجاج كرسبي بخبز التورتيلا يصنع في الفرن", price: "26" },
-                    { name: "سبيشل تشكن", desc: "دجاج مقرمش تورتيلا + جبنة شرائح + خس + كاتشب", price: "17" }
-                ]
-            },
-            {
-                category: "برجر",
-                icon: "🍔",
-                items: [
-                    { name: "كلاسيك برجر لحم", desc: "شريحة لحم + خس + طماطم + صوص جبنة", price: "15" },
-                    { name: "برجر دجاج", desc: "شريحة دجاج مفروم + خس + طماطم + صوص", price: "14" },
-                    { name: "برجر دجاج دبل", desc: "شريحتين دجاج + خس + طماطم + صوص", price: "20" },
-                    { name: "برجر لحم دبل", desc: "شريحتين لحم + خس + طماطم + صوص", price: "17" },
-                    { name: "برجر ديلوكس", desc: "شريحة برجر لحم وطني + فقاع + صوص ديلوكس", price: "20" },
-                    { name: "إسكالوب", desc: "شرائح دجاج مقلي + بطاطا + صوص جبنة", price: "15" }
-                ]
-            },
-            {
-                category: "وجبات مشوية",
-                icon: "🍢",
-                items: [
-                    { name: "فيلي دجاج", desc: "2 شريحة دجاج + أرز + بطاطا + سلاطة", price: "32" },
-                    { name: "وجبة شيش طاووق", desc: "2 سيخ دجاج + بطاطا + سلاطة", price: "32" },
-                    { name: "وجبة كباب دجاج / لحم", desc: "2 سيخ كباب + أرز + بطاطا + سلاطة", price: "30" },
-                    { name: "مكس كباب", desc: "سيخ كباب + سيخ دجاج + أرز + بطاطا", price: "32" },
-                    { name: "فخد دجاج مسحب", desc: "2 فخد دجاج + أرز + بطاطا + سلاطة", price: "33" },
-                    { name: "كبدة اسكندراني عجل", desc: "كبدة اسكندراني + أرز + بطاطا + سلاطة", price: "50" },
-                    { name: "نص دجاجة مشوية", desc: "نص دجاجة مشوية + أرز + بطاطا + سلاطة", price: "33" },
-                    { name: "مشاوي لاقونا", desc: "2 سيخ كبدة + 2 كباب + 2 فيلي + 2 كفتة + مرقاز", price: "270" }
-                ]
-            },
-            {
-                category: "وجبات كنتاكي وستربس",
-                icon: "🍗",
-                items: [
-                    { name: "وجبة كنتاكي 3 قطع", desc: "3 قطع دجاج + أرز + بطاطا + كول سلو + صوص", price: "30" },
-                    { name: "وجبة كنتاكي 6 قطع", desc: "6 قطع دجاج + أرز + بطاطا + كول سلو + صوص", price: "55" },
-                    { name: "وجبة ستربس 5 قطع", desc: "5 قطع ستربس + أرز + بطاطا + كول سلو + صوص", price: "30" },
-                    { name: "وجبة ستربس 10 قطع", desc: "10 قطع ستربس + أرز + بطاطا + كول سلو + صوص", price: "55" }
-                ]
-            },
-            {
-                category: "سلطات ومقبلات",
-                icon: "🥗",
-                items: [
-                    { name: "شوربة عدس / حلقات بصل", desc: "مقبلات", price: "5" },
-                    { name: "بطاطا متوسطة / أصابع الجبنة", desc: "مقبلات", price: "10" },
-                    { name: "ناتشوز ببطاطا", desc: "مقبلات", price: "17" },
-                    { name: "سلطة بابا غنوج / مشوية", desc: "سلطات طازجة", price: "10" },
-                    { name: "سلطة الطماطم المتبل", desc: "سلطات طازجة", price: "19" },
-                    { name: "سلطة مشكل", desc: "تشكيلة سلطات", price: "25" }
-                ]
-            }
-        ];
+/* ============== CAROUSEL LOGIC ============== */
+const pages = document.querySelectorAll('.menu-page');
+const chips = document.querySelectorAll('.chip');
+const dots = document.querySelectorAll('.dot');
+let currentPage = 0;
 
-        const navContainer = document.getElementById('nav-container');
-        const menuContainer = document.getElementById('menu-container');
-        const searchInput = document.getElementById('search-input');
-        const noResults = document.getElementById('no-results');
+function goToPage(idx){
+  idx = Math.max(0, Math.min(pages.length - 1, idx));
+  pages[idx].scrollIntoView({ behavior:'smooth', inline:'start', block:'nearest' });
+}
 
-        menuData.forEach((categoryData, index) => {
-            const btn = document.createElement('button');
-            btn.className = `category-btn ${index === 0 ? 'active' : ''}`;
-            btn.innerHTML = `<span class="icon">${categoryData.icon}</span><span>${categoryData.category}</span>`;
-            btn.onclick = () => showCategory(index);
-            navContainer.appendChild(btn);
+function updateActive(idx){
+  currentPage = idx;
+  chips.forEach((c,i)=>c.classList.toggle('active', i===idx));
+  dots.forEach((d,i)=>d.classList.toggle('active', i===idx));
+  chips[idx].scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+}
 
-            const section = document.createElement('div');
-            section.className = `category-section ${index === 0 ? 'active' : ''}`;
-            section.id = `section-${index}`;
+let scrollTimeout;
+pagesContainer.addEventListener('scroll', () => {
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    const idx = Math.round(pagesContainer.scrollLeft / pagesContainer.clientWidth);
+    if (idx !== currentPage) updateActive(idx);
+  }, 80);
+});
 
-            const titleRow = document.createElement('div');
-            titleRow.className = 'section-title-row';
-            titleRow.innerHTML = `
-                <h2 class="section-title">${categoryData.icon} ${categoryData.category}</h2>
-                <span class="section-count">${categoryData.items.length} صنف</span>
-            `;
-            section.appendChild(titleRow);
+document.getElementById('prev-btn').onclick = () => goToPage(currentPage + 1); // RTL: visually previous
+document.getElementById('next-btn').onclick = () => goToPage(currentPage - 1);
 
-            categoryData.items.forEach(item => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'menu-item';
-                itemDiv.dataset.search = (item.name + ' ' + item.desc).toLowerCase();
-                itemDiv.innerHTML = `
-                    <div class="item-info">
-                        <h3 class="item-name">${item.name}</h3>
-                        <p class="item-desc">${item.desc}</p>
-                    </div>
-                    <div class="item-price">${item.price}</div>
-                `;
-                section.appendChild(itemDiv);
-            });
+/* ============== SEARCH ============== */
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+const noResults = document.getElementById('no-results');
+const chipRowEl = document.getElementById('chip-row');
+const pagerEl = document.getElementById('pager');
 
-            menuContainer.appendChild(section);
-        });
+const allItems = [];
+menuData.forEach(cat => cat.items.forEach(item => allItems.push({ ...item, category: cat.category })));
 
-        function showCategory(activeIndex) {
-            document.querySelectorAll('.category-btn').forEach((btn, idx) => {
-                btn.classList.toggle('active', idx === activeIndex);
-            });
-            document.querySelectorAll('.category-section').forEach((section, idx) => {
-                section.classList.toggle('active', idx === activeIndex);
-            });
-        }
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
 
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value.trim().toLowerCase();
-            const sections = document.querySelectorAll('.category-section');
-            const navButtons = document.querySelectorAll('.category-btn');
+  if (q === '') {
+    pagesContainer.classList.remove('hide');
+    chipRowEl.classList.remove('hide');
+    pagerEl.classList.remove('hide');
+    searchResults.classList.remove('show');
+    noResults.style.display = 'none';
+    return;
+  }
 
-            if (query === '') {
-                navContainer.style.display = 'flex';
-                sections.forEach(s => s.classList.remove('force-show'));
-                document.querySelectorAll('.menu-item').forEach(i => i.style.display = 'flex');
-                const activeIdx = [...navButtons].findIndex(b => b.classList.contains('active'));
-                showCategory(activeIdx >= 0 ? activeIdx : 0);
-                noResults.classList.remove('show');
-                return;
-            }
+  pagesContainer.classList.add('hide');
+  chipRowEl.classList.add('hide');
+  pagerEl.classList.add('hide');
 
-            navContainer.style.display = 'none';
-            let totalMatches = 0;
+  const matches = allItems.filter(it => (it.name + ' ' + it.desc).toLowerCase().includes(q));
+  searchResults.innerHTML = matches.map(it => `
+    <div class="sr-item">
+      <div>
+        <div class="sr-name">${it.name}</div>
+        <div class="sr-desc">${it.desc}</div>
+      </div>
+      <div class="sr-price">${it.price} د.ل</div>
+    </div>
+  `).join('');
 
-            sections.forEach(section => {
-                let matchesInSection = 0;
-                section.querySelectorAll('.menu-item').forEach(item => {
-                    const match = item.dataset.search.includes(query);
-                    item.style.display = match ? 'flex' : 'none';
-                    if (match) { matchesInSection++; totalMatches++; }
-                });
-                section.classList.toggle('force-show', matchesInSection > 0);
-                section.classList.remove('active');
-            });
+  searchResults.classList.toggle('show', matches.length > 0);
+  noResults.style.display = matches.length === 0 ? 'block' : 'none';
+});
 
-            noResults.classList.toggle('show', totalMatches === 0);
-        });
-    </script>
+updateActive(0);
+</script>
 </body>
 </html>
