@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منيو مطعم لاقونا | Laguna Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-green: #1fa14b; /* لون شعار لاقونا */
+            --brand-dark: #111111;
+            --bg-color: #f8f5ee; /* لون مقارب لخلفية المنيو الورقي */
+            --card-bg: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding-bottom: 50px;
+        }
+
+        /* --- Header & Logo --- */
+        header {
+            background-color: var(--brand-dark);
+            text-align: center;
+            padding: 25px 20px;
+            border-bottom: 5px solid var(--brand-green);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgb(222, 221, 221);
+        }
+
+        .logo {
+            max-width: 180px;
+            height: auto;
+        }
+
+        /* --- Category Navigation --- */
+        .category-nav {
+            display: flex;
+            overflow-x: auto;
+            background: var(--card-bg);
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            scroll-behavior: smooth;
+        }
+
+        .category-nav::-webkit-scrollbar {
+            display: none; /* إخفاء شريط التمرير للهواتف */
+        }
+
+        .category-btn {
+            background: var(--bg-color);
+            border: 1px solid #ddd;
+            color: var(--brand-dark);
+            padding: 8px 16px;
+            margin-left: 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .category-btn.active {
+            background: var(--brand-green);
+            color: white;
+            border-color: var(--brand-green);
+        }
+
+        /* --- Menu Content --- */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .category-section {
+            margin-bottom: 35px;
+            display: none; /* سيتم إظهار القسم النشط عبر الجافاسكريبت */
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .category-section.active {
+            display: block;
+        }
+
+        .section-title {
+            color: var(--brand-dark);
+            border-bottom: 3px solid var(--brand-green);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: inline-block;
+        }
+
+        .menu-item {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border-right: 4px solid transparent;
+            transition: 0.3s;
+        }
+
+        .menu-item:hover {
+            border-right-color: var(--brand-green);
+        }
+
+        .item-info {
+            flex: 1;
+            padding-left: 15px;
+        }
+
+        .item-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--brand-dark);
+        }
+
+        .item-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .item-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--brand-green);
+            background: #eafbf0;
+            padding: 5px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="C:\Users\Ali\Downloads\شسشسشسشس.png" alt="Laguna Restaurant" class="logo">
+    </header>
+
+    <nav class="category-nav" id="nav-container"></nav>
+
+    <div class="container" id="menu-container"></div>
+
+    <script>
+        // --- قاعدة بيانات المنيو ---
+        // يمكنك تعديل الأسعار أو إضافة وحذف الأصناف من هنا بكل سهولة
+        const menuData = [
+            {
+                category: "بيتزا - حجم كبير",
+                items: [
+                    { name: "بيتزا مارغريتا", desc: "صلصة + طماطم + جبنة", price: "19" },
+                    { name: "بيتزا خضروات", desc: "صلصة فلفل حلو ألوان + طماطم + فقاع", price: "22" },
+                    { name: "بيتزا الأجبان الأربعة", desc: "أربع أنواع من الجبنة + صلصة", price: "27" },
+                    { name: "بيتزا مفروم لحم", desc: "لحم مفروم متبل + طماطم + جبنة + فلفل حلو", price: "27" },
+                    { name: "بيتزا دجاج", desc: "دجاج متبل + فلفل حلو + طماطم + جبنة + صلصة", price: "27" },
+                    { name: "بيتزا مرقاز", desc: "قطع مرقاز + زيتون أسود + صوص باربيكيو + جبنة", price: "30" },
+                    { name: "بيتزا كباب لحم", desc: "سيخ كباب + زيتون + طماطم + جبنة", price: "30" },
+                    { name: "بيتزا سلامي", desc: "شرائح سلامي + فلفل حلو + صلصة طماطم + جبنة", price: "28" },
+                    { name: "بيتزا موجة حارة", desc: "دجاج متبل حار + فلفل حار + صلصة طماطم + جبنة", price: "27" },
+                    { name: "بيتزا سموكي", desc: "شرائح سلامي + دجاج مشوي مدخن + صلصة طماطم + جبنة + فلفل حلو", price: "29" }
+                ]
+            },
+            {
+                category: "المعجنات",
+                items: [
+                    { name: "مقلوبة دجاج", desc: "دجاج + بطاطا + أجبان + صوص + كاتشب", price: "19" },
+                    { name: "مقلوبة لحم", desc: "لحم مفروم + بطاطا + أجبان + صوص + كاتشب", price: "20" },
+                    { name: "مقلوبة كبدة عجل", desc: "لحم مفروم + بطاطا + أجبان + صوص", price: "27" },
+                    { name: "باقيت دجاج", desc: "دجاج + جبنة + بطاطا + صوصات", price: "22" },
+                    { name: "باقيت لحم", desc: "لحم مفروم + جبنة + بطاطا + صوصات", price: "24" },
+                    { name: "باقيت كبدة عجل", desc: "كبدة + جبنة + بطاطا + صوصات", price: "28" },
+                    { name: "كبدة فرن", desc: "كبدة + جبنة + بطاطا + صوصات", price: "28" },
+                    { name: "فاهيتا فرن", desc: "فاهيتا + جبنة + بطاطا + صوصات", price: "23" }
+                ]
+            },
+            {
+                category: "سندوتشات",
+                items: [
+                    { name: "تشكن فيليه", desc: "شريحة دجاج مشوية + خس + طماطم + صوص", price: "15" },
+                    { name: "تشكن لاقونا", desc: "شريحة دجاج مشوية مع قطع الدجاج + الخضار", price: "22" },
+                    { name: "تشكن كرانش", desc: "شريحة دجاج كرسبي + خس + طماطم + صوص التاكسس", price: "16" },
+                    { name: "كباب دجاج", desc: "سيخ كباب دجاج + خس + طماطم + معدنوس", price: "14" },
+                    { name: "كفتة لحم بالجبنة", desc: "2 قطع كفتة محشوة جبن + صوص + مايونيز", price: "15" },
+                    { name: "تشكن فاهيتا", desc: "قطع مشوية + صوص الفاهيتا + جبنة شرائح", price: "14" },
+                    { name: "كبدة اسكندراني", desc: "قطع كبدة متبلة ومشوية مع المايونيز", price: "20" },
+                    { name: "تشكن لودر", desc: "شريحة دجاج مقرمش + فلفل مخلل + صوص الساموراي", price: "17" },
+                    { name: "طابونة دجاج", desc: "قطع دجاج مشوية + زيتون شرائح + صوص", price: "14" },
+                    { name: "طابونة كبدة", desc: "قطع كبدة مشوية + بصل + صوص + جبنة", price: "20" }
+                ]
+            },
+            {
+                category: "سندوتشات VIP",
+                items: [
+                    { name: "تشكن سموكي", desc: "شريحتين دجاج مشوي بخبز التورتيلا + صوص السموكي", price: "22" },
+                    { name: "تشكن كرسبي", desc: "شريحتين دجاج كرسبي بخبز التورتيلا يصنع في الفرن", price: "26" },
+                    { name: "سبيشل تشكن", desc: "دجاج مقرمش تورتيلا + جبنة شرائح + خس + كاتشب", price: "17" }
+                ]
+            },
+            {
+                category: "برجر",
+                items: [
+                    { name: "كلاسيك برجر لحم", desc: "شريحة لحم + خس + طماطم + صوص جبنة", price: "15" },
+                    { name: "برجر دجاج", desc: "شريحة دجاج مفروم + خس + طماطم + صوص", price: "14" },
+                    { name: "برجر دجاج دبل", desc: "شريحتين دجاج + خس + طماطم + صوص", price: "20" },
+                    { name: "برجر لحم دبل", desc: "شريحتين لحم + خس + طماطم + صوص", price: "17" },
+                    { name: "برجر ديلوكس", desc: "شريحة برجر لحم وطني + فقاع + صوص ديلوكس", price: "20" },
+                    { name: "إسكالوب", desc: "شرائح دجاج مقلي + بطاطا + صوص جبنة", price: "15" }
+                ]
+            },
+            {
+                category: "وجبات مشوية",
+                items: [
+                    { name: "فيلي دجاج", desc: "2 شريحة دجاج + أرز + بطاطا + سلاطة", price: "32" },
+                    { name: "وجبة شيش طاووق", desc: "2 سيخ دجاج + بطاطا + سلاطة", price: "32" },
+                    { name: "وجبة كباب دجاج / لحم", desc: "2 سيخ كباب + أرز + بطاطا + سلاطة", price: "30" },
+                    { name: "مكس كباب", desc: "سيخ كباب + سيخ دجاج + أرز + بطاطا", price: "32" },
+                    { name: "فخد دجاج مسحب", desc: "2 فخد دجاج + أرز + بطاطا + سلاطة", price: "33" },
+                    { name: "كبدة اسكندراني عجل", desc: "كبدة اسكندراني + أرز + بطاطا + سلاطة", price: "50" },
+                    { name: "نص دجاجة مشوية", desc: "نص دجاجة مشوية + أرز + بطاطا + سلاطة", price: "33" },
+                    { name: "مشاوي لاقونا", desc: "2 سيخ كبدة + 2 كباب + 2 فيلي + 2 كفتة + مرقاز", price: "270" }
+                ]
+            },
+            {
+                category: "وجبات كنتاكي وستربس",
+                items: [
+                    { name: "وجبة كنتاكي 3 قطع", desc: "3 قطع دجاج + أرز + بطاطا + كول سلو + صوص", price: "30" },
+                    { name: "وجبة كنتاكي 6 قطع", desc: "6 قطع دجاج + أرز + بطاطا + كول سلو + صوص", price: "55" },
+                    { name: "وجبة ستربس 5 قطع", desc: "5 قطع ستربس + أرز + بطاطا + كول سلو + صوص", price: "30" },
+                    { name: "وجبة ستربس 10 قطع", desc: "10 قطع ستربس + أرز + بطاطا + كول سلو + صوص", price: "55" }
+                ]
+            },
+            {
+                category: "سلطات ومقبلات",
+                items: [
+                    { name: "شوربة عدس / حلقات بصل", desc: "مقبلات", price: "5" },
+                    { name: "بطاطا متوسطة / أصابع الجبنة", desc: "مقبلات", price: "10" },
+                    { name: "ناتشوز ببطاطا", desc: "مقبلات", price: "17" },
+                    { name: "سلطة بابا غنوج / مشوية", desc: "سلطات طازجة", price: "10" },
+                    { name: "سلطة الطماطم المتبل", desc: "سلطات طازجة", price: "19" },
+                    { name: "سلطة مشكل", desc: "تشكيلة سلطات", price: "25" }
+                ]
+            }
+        ];
+
+        const navContainer = document.getElementById('nav-container');
+        const menuContainer = document.getElementById('menu-container');
+
+        // بناء الواجهة بناءً على البيانات
+        menuData.forEach((categoryData, index) => {
+            // 1. إنشاء أزرار التصنيفات
+            const btn = document.createElement('button');
+            btn.className = `category-btn ${index === 0 ? 'active' : ''}`;
+            btn.innerText = categoryData.category;
+            btn.onclick = () => showCategory(index);
+            navContainer.appendChild(btn);
+
+            // 2. إنشاء أقسام المنيو
+            const section = document.createElement('div');
+            section.className = `category-section ${index === 0 ? 'active' : ''}`;
+            section.id = `section-${index}`;
+            
+            const title = document.createElement('h2');
+            title.className = 'section-title';
+            title.innerText = categoryData.category;
+            section.appendChild(title);
+
+            categoryData.items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'menu-item';
+                itemDiv.innerHTML = `
+                    <div class="item-info">
+                        <h3 class="item-name">${item.name}</h3>
+                        <p class="item-desc">${item.desc}</p>
+                    </div>
+                    <div class="item-price">${item.price} د.ل</div>
+                `;
+                section.appendChild(itemDiv);
+            });
+
+            menuContainer.appendChild(section);
+        });
+
+        // دالة التبديل بين الأقسام
+        function showCategory(activeIndex) {
+            // تحديث الأزرار
+            document.querySelectorAll('.category-btn').forEach((btn, idx) => {
+                btn.classList.toggle('active', idx === activeIndex);
+            });
+            // تحديث الأقسام المعروضة
+            document.querySelectorAll('.category-section').forEach((section, idx) => {
+                section.classList.toggle('active', idx === activeIndex);
+            });
+        }
+    </script>
+</body>
+</html>
