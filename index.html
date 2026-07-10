@@ -5,84 +5,199 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>نموذج قائمة هادئة | Demo Menu Template</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cairo:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#faf8f4;
     --ink:#2c2823;
     --muted:#9a9184;
+    --muted-2:#b3ab9d;
     --label:#eee8de;
+    --line:#e2dbcc;
     --plate-a:#fdfcfa;
     --plate-b:#efe9de;
+    --accent:#a8562f;
+    --accent-soft:#f4e6da;
+    --cat-appetizers:#8a6f3f;
+    --cat-salads:#5c7a4a;
+    --cat-mains:#a8562f;
+    --cat-desserts:#b3577a;
+    --cat-juices:#d98a3d;
+    --cat-coffee:#6b4a34;
   }
   *{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif;}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    padding:50px 20px 90px;
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);}
+
+  /* ---------- NAV ---------- */
+  .site-nav{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(250,248,244,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+    padding:16px 20px;
   }
-  .wrap{max-width:460px;margin:0 auto;}
+  .nav-inner{
+    max-width:900px;
+    margin:0 auto;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:30px;
+    flex-wrap:wrap;
+  }
+  .nav-link{
+    --cat:var(--muted-2);
+    font-size:0.82rem;
+    letter-spacing:1px;
+    color:var(--muted);
+    text-decoration:none;
+    padding-bottom:4px;
+    border-bottom:1.5px solid transparent;
+    transition:0.25s;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .nav-link.active{color:var(--ink);border-bottom-color:var(--cat);}
+  .nav-link:hover{color:var(--ink);}
+  .nav-link:focus-visible{outline:2px solid var(--ink);outline-offset:4px;border-radius:2px;}
+
+  @media (max-width:700px){
+    .nav-inner{
+      flex-wrap:nowrap;
+      justify-content:flex-start;
+      overflow-x:auto;
+      gap:24px;
+      -ms-overflow-style:none;
+      scrollbar-width:none;
+    }
+    .nav-inner::-webkit-scrollbar{display:none;}
+    .nav-link{flex:0 0 auto;}
+  }
+
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px;}
 
   .top-note{
     text-align:center;
     font-size:0.72rem;
     letter-spacing:2px;
-    color:var(--muted);
+    color:var(--muted-2);
     text-transform:uppercase;
-    margin-bottom:56px;
+    margin:52px 0 12px;
+  }
+  .top-title{
+    text-align:center;
+    font-family:'Amiri', serif;
+    font-style:italic;
+    font-weight:700;
+    font-size:clamp(2rem, 4vw + 1rem, 2.7rem);
+  }
+  .top-divider{
+    display:block;
+    margin:22px auto 74px;
   }
 
+  /* ---------- SECTION ---------- */
+  .menu-section{padding:22px 0 22px;}
+  .section-head{
+    text-align:center;
+    margin-bottom:56px;
+  }
+  .section-head::before{
+    content:'';
+    display:block;
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--cat, var(--muted-2));
+    margin:0 auto 16px;
+  }
+  .section-title{
+    font-family:'Amiri', serif;
+    font-style:italic;
+    font-weight:700;
+    font-size:clamp(1.5rem, 1.6vw + 1rem, 1.9rem);
+  }
+  .section-sub{
+    font-size:0.8rem;
+    color:var(--muted);
+    margin-top:8px;
+  }
+
+  .dish-grid{display:flex;flex-direction:column;}
+
+  @media (min-width:760px){
+    .dish-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      column-gap:58px;
+    }
+  }
+
+  /* ---------- DISH ---------- */
   .dish{
     position:relative;
-    margin-bottom:96px;
+    margin-bottom:84px;
     display:flex;
     flex-direction:column;
     align-items:center;
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .6s ease, transform .6s ease;
   }
-  .dish:last-child{margin-bottom:0;}
+  .dish.in-view{opacity:1;transform:translateY(0);}
+
+  .badge{
+    position:absolute;
+    top:2px;
+    left:calc(50% - 100px);
+    z-index:5;
+    background:var(--accent);
+    color:#fdfcfa;
+    font-size:0.62rem;
+    letter-spacing:0.5px;
+    padding:5px 12px;
+    border-radius:20px;
+    box-shadow:0 6px 14px -6px rgba(168,86,47,0.55);
+  }
 
   .plate-shadow{
     position:absolute;
     bottom:14px;
     width:70%;
-    height:22px;
-    background:radial-gradient(ellipse at center, rgba(0,0,0,0.16) 0%, rgba(0,0,0,0) 72%);
+    height:20px;
+    background:radial-gradient(ellipse at center, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 72%);
     z-index:1;
   }
-
   .plate{
-    width:220px;
-    height:220px;
+    width:200px;height:200px;
     border-radius:50%;
-    background:
-      radial-gradient(circle at 38% 32%, var(--plate-a) 0%, var(--plate-a) 46%, var(--plate-b) 100%);
-    box-shadow:
-      0 30px 45px -20px rgba(30,25,18,0.28),
-      inset 0 0 0 1px rgba(0,0,0,0.04);
-    position:relative;
-    z-index:2;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    background:radial-gradient(circle at 38% 32%, var(--plate-a) 0%, var(--plate-a) 46%, var(--plate-b) 100%);
+    box-shadow:0 26px 40px -18px rgba(30,25,18,0.28), inset 0 0 0 1px rgba(0,0,0,0.04);
+    position:relative;z-index:2;
+    display:flex;align-items:center;justify-content:center;
   }
-  .plate svg{width:62%;height:62%;}
+  @media (min-width:760px){
+    .plate{width:226px;height:226px;}
+  }
+  .plate svg{width:60%;height:60%;}
+  .plate img{width:82%;height:82%;object-fit:cover;border-radius:50%;}
 
   .label-box{
-    position:relative;
-    z-index:3;
+    position:relative;z-index:3;
     background:var(--label);
-    padding:14px 26px;
-    margin-top:-26px;
+    padding:13px 26px;
+    margin-top:-22px;
     align-self:flex-end;
-    margin-left: 6%;
+    margin-left:6%;
     text-align:center;
     box-shadow:0 10px 22px -8px rgba(30,25,18,0.18);
-    min-width:150px;
+    min-width:158px;
+    border-top:1.5px solid #d9d0bd;
   }
   .dish:nth-child(even) .label-box{
-    align-self:flex-start;
-    margin-left:0;
-    margin-right:6%;
+    align-self:flex-start;margin-left:0;margin-right:6%;
   }
 
   .item-name{
@@ -93,159 +208,642 @@
     line-height:1.35;
   }
   .item-price{
-    font-family:'Cairo',sans-serif;
-    font-weight:500;
     font-size:0.72rem;
     color:var(--muted);
     margin-top:5px;
     letter-spacing:0.5px;
   }
+  .item-desc{
+    font-size:0.78rem;
+    color:var(--muted);
+    line-height:1.75;
+    max-width:250px;
+    text-align:center;
+    margin-top:16px;
+  }
 
   footer{
     text-align:center;
-    margin-top:60px;
+    margin-top:20px;
+    padding:44px 20px 68px;
     font-size:0.72rem;
-    color:var(--muted);
+    color:var(--muted-2);
     letter-spacing:1px;
+    border-top:1px solid var(--line);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .dish{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
   }
 </style>
 </head>
 <body>
+
+<nav class="site-nav">
+  <div class="nav-inner" id="nav-links">
+    <a href="#sec-appetizers" class="nav-link active" style="--cat:var(--cat-appetizers)">مقبلات</a>
+    <a href="#sec-salads" class="nav-link" style="--cat:var(--cat-salads)">سلطات</a>
+    <a href="#sec-mains" class="nav-link" style="--cat:var(--cat-mains)">أطباق رئيسية</a>
+    <a href="#sec-desserts" class="nav-link" style="--cat:var(--cat-desserts)">حلويات</a>
+    <a href="#sec-juices" class="nav-link" style="--cat:var(--cat-juices)">عصائر</a>
+    <a href="#sec-coffee" class="nav-link" style="--cat:var(--cat-coffee)">مشروبات ساخنة</a>
+  </div>
+</nav>
+
 <div class="wrap">
-
   <p class="top-note">نموذج قائمة &mdash; بيانات وصور تجريبية</p>
+  <h1 class="top-title">قائمتنا</h1>
+  <svg class="top-divider" viewBox="0 0 200 16" width="150" height="14">
+    <line x1="0" y1="8" x2="78" y2="8" stroke="#e2dbcc" stroke-width="1"/>
+    <circle cx="100" cy="8" r="3" fill="#b3ab9d"/>
+    <line x1="122" y1="8" x2="200" y2="8" stroke="#e2dbcc" stroke-width="1"/>
+  </svg>
 
-  <!-- 1 -->
-  <div class="dish">
-    <div class="plate-shadow"></div>
-    <div class="plate">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <path d="M32 30 L68 30 L64 82 L36 82 Z" fill="none" stroke="#c9c0af" stroke-width="1.6"/>
-        <path d="M35 78 L65 78 L63 62 L37 62 Z" fill="#d8b98f"/>
-        <path d="M36 60 L64 60 L62.5 46 L37.5 46 Z" fill="#eee0c8"/>
-        <path d="M37.5 44 L62.5 44 L61 32 L39 32 Z" fill="#d8b98f"/>
-        <path d="M34 28 C40 20 60 20 66 28 C60 26 40 26 34 28 Z" fill="#fbf7ee"/>
-        <circle cx="44" cy="24" r="3" fill="#b23a4e"/>
-        <circle cx="50" cy="21" r="3" fill="#b23a4e"/>
-        <circle cx="56" cy="24" r="3" fill="#b23a4e"/>
-        <path d="M50 18 q3 -4 6 -1" stroke="#5c7a4a" stroke-width="1.4" fill="none"/>
-      </svg>
+  <!-- ============ APPETIZERS ============ -->
+  <section class="menu-section" id="sec-appetizers">
+    <div class="section-head" style="--cat:var(--cat-appetizers)">
+      <h2 class="section-title">مقبلات</h2>
+      <p class="section-sub">بدايات شهية لفتح الشهية</p>
     </div>
-    <div class="label-box">
-      <div class="item-name">بارفيه الفانيليا<br>والتوت</div>
-      <div class="item-price">18 د.ل</div>
-    </div>
-  </div>
+    <div class="dish-grid">
 
-  <!-- 2 -->
-  <div class="dish">
-    <div class="plate-shadow"></div>
-    <div class="plate">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="50" cy="70" rx="26" ry="7" fill="#d8b98f"/>
-        <ellipse cx="50" cy="61" rx="25" ry="7" fill="#e3c69c"/>
-        <ellipse cx="50" cy="52" rx="24" ry="7" fill="#d8b98f"/>
-        <ellipse cx="50" cy="43" rx="23" ry="7" fill="#ecd2a9"/>
-        <path d="M30 40 C40 34 60 34 70 40" stroke="#fbf7ee" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <circle cx="40" cy="36" r="2.6" fill="#37455c"/>
-        <circle cx="47" cy="33" r="2.6" fill="#37455c"/>
-        <circle cx="54" cy="36" r="2.6" fill="#37455c"/>
-      </svg>
-    </div>
-    <div class="label-box">
-      <div class="item-name">بان كيك بالفانيليا</div>
-      <div class="item-price">14 د.ل</div>
-    </div>
-  </div>
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="34" fill="none" stroke="#c9c0af" stroke-width="1.4"/>
+            <circle cx="50" cy="50" r="29" fill="#e4c68c"/>
+            <path d="M50 50 m-20 0 a20 20 0 0 1 40 0" fill="none" stroke="#c9a866" stroke-width="1.2" opacity="0.6"/>
+            <path d="M50 50 m-14 0 a14 14 0 0 1 28 0" fill="none" stroke="#c9a866" stroke-width="1.2" opacity="0.6"/>
+            <circle cx="50" cy="42" r="6" fill="#f4ede0"/>
+            <path d="M44 40 q6 -4 12 0" stroke="#c9a866" stroke-width="1" fill="none"/>
+            <circle cx="38" cy="58" r="1.6" fill="#5c7a4a"/>
+            <circle cx="60" cy="60" r="1.6" fill="#5c7a4a"/>
+            <circle cx="50" cy="64" r="1.6" fill="#5c7a4a"/>
+            <path d="M64 38 q6 6 2 14" stroke="#c9862f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">حمص بالطحينة</div>
+          <div class="item-price">10 د.ل</div>
+        </div>
+        <p class="item-desc">حمص كريمي مطحون بالطحينة وزيت الزيتون، يُقدَّم مع رشة بابريكا.</p>
+      </div>
 
-  <!-- 3 -->
-  <div class="dish">
-    <div class="plate-shadow"></div>
-    <div class="plate">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="28" y="40" width="44" height="26" rx="2" fill="#c9862f"/>
-        <rect x="28" y="40" width="44" height="26" rx="2" fill="url(#brulee)" opacity="0.55"/>
-        <defs>
-          <radialGradient id="brulee" cx="30%" cy="30%" r="80%">
-            <stop offset="0%" stop-color="#5c3a15"/>
-            <stop offset="100%" stop-color="#c9862f" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <circle cx="38" cy="47" r="2" fill="#5c3a15" opacity="0.5"/>
-        <circle cx="55" cy="50" r="1.6" fill="#5c3a15" opacity="0.5"/>
-        <circle cx="62" cy="44" r="1.8" fill="#5c3a15" opacity="0.5"/>
-        <line x1="76" y1="38" x2="80" y2="70" stroke="#2c2117" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-    </div>
-    <div class="label-box">
-      <div class="item-name">كريم بروليه<br>بالفانيليا</div>
-      <div class="item-price">16 د.ل</div>
-    </div>
-  </div>
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="34" fill="none" stroke="#c9c0af" stroke-width="1.4"/>
+            <circle cx="50" cy="50" r="29" fill="#8a7166"/>
+            <circle cx="45" cy="45" r="2" fill="#4a3a33"/>
+            <circle cx="58" cy="52" r="1.6" fill="#4a3a33"/>
+            <circle cx="50" cy="60" r="1.8" fill="#4a3a33"/>
+            <circle cx="62" cy="42" r="1.4" fill="#4a3a33"/>
+            <circle cx="50" cy="46" r="5" fill="#e8c96a" opacity="0.85"/>
+            <circle cx="40" cy="58" r="1.4" fill="#b23a4e"/>
+            <circle cx="44" cy="62" r="1.2" fill="#b23a4e"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">بابا غنوج</div>
+          <div class="item-price">10 د.ل</div>
+        </div>
+        <p class="item-desc">باذنجان مشوي مهروس مع الطحينة والثوم وعصير الليمون.</p>
+      </div>
 
-  <!-- 4 -->
-  <div class="dish">
-    <div class="plate-shadow"></div>
-    <div class="plate">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <path d="M34 30 L66 30 L63 78 L37 78 Z" fill="none" stroke="#c9c0af" stroke-width="1.6"/>
-        <path d="M36.5 76 L63.5 76 L61.5 55 L38.5 55 Z" fill="#c99a63"/>
-        <path d="M37.5 54 L62.5 54 L61 34 L39 34 Z" fill="#f0e6d3"/>
-        <circle cx="42" cy="40" r="1.4" fill="#8a5a2c"/>
-        <circle cx="50" cy="37" r="1.4" fill="#8a5a2c"/>
-        <circle cx="58" cy="41" r="1.4" fill="#8a5a2c"/>
-        <circle cx="46" cy="45" r="1.4" fill="#8a5a2c"/>
-        <circle cx="55" cy="46" r="1.4" fill="#8a5a2c"/>
-        <line x1="24" y1="70" x2="34" y2="66" stroke="#8a5a2c" stroke-width="3" stroke-linecap="round"/>
-      </svg>
-    </div>
-    <div class="label-box">
-      <div class="item-name">تيراميسو<br>بالزنجبيل</div>
-      <div class="item-price">17 د.ل</div>
-    </div>
-  </div>
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="34" fill="none" stroke="#c9c0af" stroke-width="1.2"/>
+            <path d="M32 62 L50 30 L50 62 Z" fill="#c9862f" stroke="#a8672a" stroke-width="1"/>
+            <path d="M50 62 L50 30 L68 62 Z" fill="#d8a355" stroke="#a8672a" stroke-width="1"/>
+            <path d="M40 60 L50 44 L60 60 Z" fill="none" stroke="#8a5a2c" stroke-width="1" opacity="0.5"/>
+            <path d="M62 34 q6 -4 10 2" stroke="#5c7a4a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">سمبوسة بالجبن</div>
+          <div class="item-price">12 د.ل</div>
+        </div>
+        <p class="item-desc">عجينة مقرمشة محشوة بخليط الجبن الذائب، تُقدَّم ساخنة.</p>
+      </div>
 
-  <!-- 5 -->
-  <div class="dish">
-    <div class="plate-shadow"></div>
-    <div class="plate">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <path d="M30 78 L70 78 L58 26 L42 26 Z" fill="none" stroke="#c9c0af" stroke-width="1.4"/>
-        <path d="M32 76 L68 76 L64 64 L36 64 Z" fill="#f4ede0"/>
-        <path d="M35 62 L65 62 L62.5 50 L37.5 50 Z" fill="#f4ede0"/>
-        <path d="M38 48 L62 48 L59.5 30 L40.5 30 Z" fill="#f4ede0"/>
-        <rect x="34.5" y="62" width="31" height="2.5" fill="#c9536a"/>
-        <rect x="37" y="48" width="26" height="2.5" fill="#c9536a"/>
-        <circle cx="44" cy="27" r="2.6" fill="#b23a4e"/>
-        <circle cx="50" cy="25" r="2.6" fill="#b23a4e"/>
-        <circle cx="56" cy="27" r="2.6" fill="#b23a4e"/>
-      </svg>
-    </div>
-    <div class="label-box">
-      <div class="item-name">كيك التوت البري<br>بالشوكولاتة البيضاء</div>
-      <div class="item-price">19 د.ل</div>
-    </div>
-  </div>
+      <div class="dish">
+        <span class="badge">الأكثر طلبًا</span>
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="34" fill="none" stroke="#c9c0af" stroke-width="1.2"/>
+            <defs><radialGradient id="g-kibbeh" cx="35%" cy="30%" r="80%"><stop offset="0%" stop-color="#c9862f"/><stop offset="100%" stop-color="#8a5a2c" stop-opacity="0"/></radialGradient></defs>
+            <ellipse cx="40" cy="46" rx="12" ry="9" fill="#8a5a2c"/>
+            <ellipse cx="40" cy="46" rx="12" ry="9" fill="url(#g-kibbeh)" opacity="0.5"/>
+            <ellipse cx="62" cy="52" rx="12" ry="9" fill="#8a5a2c"/>
+            <ellipse cx="62" cy="52" rx="12" ry="9" fill="url(#g-kibbeh)" opacity="0.5"/>
+            <ellipse cx="50" cy="64" rx="12" ry="9" fill="#8a5a2c"/>
+            <ellipse cx="50" cy="64" rx="12" ry="9" fill="url(#g-kibbeh)" opacity="0.5"/>
+            <path d="M66 36 q6 -4 10 2" stroke="#5c7a4a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">كبة مقلية</div>
+          <div class="item-price">13 د.ل</div>
+        </div>
+        <p class="item-desc">كرات برغل محشوة باللحم المفروم والبصل والصنوبر المحمّص.</p>
+      </div>
 
-  <!-- 6 -->
-  <div class="dish">
-    <div class="plate-shadow"></div>
-    <div class="plate">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="50" cy="66" rx="30" ry="12" fill="none" stroke="#c9c0af" stroke-width="1.4"/>
-        <ellipse cx="46" cy="62" rx="20" ry="8" fill="#5c3620"/>
-        <path d="M34 60 C38 46 54 46 58 60 C54 66 38 66 34 60Z" fill="#8a5a2c"/>
-        <circle cx="66" cy="58" r="9" fill="#f4ede0"/>
-        <path d="M64 50 q2 -6 4 0" stroke="#5c7a4a" stroke-width="1.4" fill="none"/>
-      </svg>
     </div>
-    <div class="label-box">
-      <div class="item-name">بودينغ التوفي<br>اللاصق</div>
-      <div class="item-price">15 د.ل</div>
-    </div>
-  </div>
+  </section>
 
-  <footer>هذا نموذج توضيحي فقط &mdash; يمكن استبدال الصور والأسماء والألوان بسهولة</footer>
+  <!-- ============ SALADS ============ -->
+  <section class="menu-section" id="sec-salads">
+    <div class="section-head" style="--cat:var(--cat-salads)">
+      <h2 class="section-title">سلطات</h2>
+      <p class="section-sub">خضار طازجة تُحضّر يوميًا</p>
+    </div>
+    <div class="dish-grid">
+
+      <div class="dish">
+        <span class="badge">الأكثر طلبًا</span>
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="34" fill="none" stroke="#c9c0af" stroke-width="1.4"/>
+            <circle cx="50" cy="50" r="29" fill="#eef0df"/>
+            <circle cx="40" cy="42" r="5" fill="#c94f3f"/>
+            <circle cx="58" cy="46" r="4.5" fill="#c94f3f"/>
+            <ellipse cx="52" cy="60" rx="6" ry="4" fill="#6b8f4e"/>
+            <ellipse cx="38" cy="58" rx="6" ry="4" fill="#6b8f4e"/>
+            <circle cx="62" cy="60" r="2.2" fill="#2c2117"/>
+            <circle cx="55" cy="66" r="2.2" fill="#2c2117"/>
+            <rect x="42" y="40" width="8" height="8" fill="#f8f4e8" stroke="#e2dbcc" stroke-width="0.6"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">سلطة يونانية</div>
+          <div class="item-price">12 د.ل</div>
+        </div>
+        <p class="item-desc">خضار طازجة وجبنة فيتا وزيتون كالاماتا مع زيت الزيتون.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="34" fill="none" stroke="#c9c0af" stroke-width="1.4"/>
+            <path d="M30 60 q6 -22 20 -24 q-10 8 -8 24Z" fill="#7a9a5c"/>
+            <path d="M44 62 q4 -24 20 -26 q-8 10 -6 26Z" fill="#8fae6e"/>
+            <path d="M58 60 q6 -18 16 -18 q-8 6 -6 18Z" fill="#7a9a5c"/>
+            <rect x="40" y="58" width="6" height="6" fill="#e3c69c" transform="rotate(15 43 61)"/>
+            <rect x="54" y="62" width="6" height="6" fill="#e3c69c" transform="rotate(-10 57 65)"/>
+            <circle cx="50" cy="66" r="1.4" fill="#f4ede0"/>
+            <circle cx="56" cy="70" r="1.2" fill="#f4ede0"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">سلطة القيصر</div>
+          <div class="item-price">13 د.ل</div>
+        </div>
+        <p class="item-desc">خس روماني مقرمش مع صلصة القيصر وخبز محمّص وبارميزان.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="34" fill="none" stroke="#c9c0af" stroke-width="1.4"/>
+            <circle cx="50" cy="50" r="29" fill="#ece2c6"/>
+            <g fill="#c9a866">
+              <circle cx="40" cy="44" r="1.2"/><circle cx="46" cy="40" r="1.2"/><circle cx="52" cy="44" r="1.2"/><circle cx="58" cy="40" r="1.2"/><circle cx="44" cy="50" r="1.2"/><circle cx="60" cy="48" r="1.2"/>
+            </g>
+            <path d="M52 58 q10 -4 14 6 q-8 6 -14 -6Z" fill="#6b8f4e"/>
+            <path d="M52 58 q10 -4 14 6" stroke="#4a6a38" stroke-width="0.8" fill="none"/>
+            <circle cx="36" cy="60" r="3" fill="#c94f3f"/>
+            <circle cx="42" cy="64" r="2.4" fill="#c94f3f"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">سلطة الكينوا<br>والأفوكادو</div>
+          <div class="item-price">14 د.ل</div>
+        </div>
+        <p class="item-desc">كينوا مسلوقة مع أفوكادو طازج وطماطم كرزية وعصير ليمون.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="34" fill="none" stroke="#c9c0af" stroke-width="1.4"/>
+            <circle cx="50" cy="50" r="29" fill="#c7d19a"/>
+            <g fill="#5c7a4a">
+              <circle cx="40" cy="42" r="1.3"/><circle cx="46" cy="46" r="1.3"/><circle cx="52" cy="40" r="1.3"/><circle cx="58" cy="46" r="1.3"/><circle cx="44" cy="52" r="1.3"/><circle cx="50" cy="56" r="1.3"/><circle cx="56" cy="52" r="1.3"/><circle cx="62" cy="58" r="1.3"/><circle cx="38" cy="58" r="1.3"/>
+            </g>
+            <circle cx="48" cy="62" r="2.4" fill="#c94f3f"/>
+            <circle cx="56" cy="64" r="2" fill="#c94f3f"/>
+            <circle cx="42" cy="46" r="1" fill="#e3c69c"/><circle cx="54" cy="50" r="1" fill="#e3c69c"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">تبولة</div>
+          <div class="item-price">10 د.ل</div>
+        </div>
+        <p class="item-desc">بقدونس مفروم ناعمًا مع برغل وطماطم وعصير ليمون طازج.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ MAIN COURSES ============ -->
+  <section class="menu-section" id="sec-mains">
+    <div class="section-head" style="--cat:var(--cat-mains)">
+      <h2 class="section-title">أطباق رئيسية</h2>
+      <p class="section-sub">تُطهى طازجة عند الطلب</p>
+    </div>
+    <div class="dish-grid">
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#c9c0af" stroke-width="1.2"/>
+            <defs><radialGradient id="g-chicken" cx="35%" cy="25%" r="80%"><stop offset="0%" stop-color="#eac27a"/><stop offset="100%" stop-color="#c9862f" stop-opacity="0"/></radialGradient></defs>
+            <path d="M36 38 q14 -14 28 0 q6 14 -4 28 q-14 8 -22 -4 q-8 -12 -2 -24Z" fill="#c9862f"/>
+            <path d="M36 38 q14 -14 28 0 q6 14 -4 28 q-14 8 -22 -4 q-8 -12 -2 -24Z" fill="url(#g-chicken)" opacity="0.5"/>
+            <line x1="38" y1="42" x2="56" y2="30" stroke="#8a5a2c" stroke-width="1.2" opacity="0.6"/>
+            <line x1="40" y1="50" x2="60" y2="38" stroke="#8a5a2c" stroke-width="1.2" opacity="0.6"/>
+            <line x1="42" y1="58" x2="60" y2="48" stroke="#8a5a2c" stroke-width="1.2" opacity="0.6"/>
+            <path d="M66 60 q6 -4 10 2" stroke="#5c7a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M70 66 q6 -4 10 2" stroke="#5c7a4a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">دجاج مشوي<br>بالأعشاب</div>
+          <div class="item-price">28 د.ل</div>
+        </div>
+        <p class="item-desc">صدر دجاج متبّل بالأعشاب الطازجة، يُقدَّم مع خضار مشوية.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#c9c0af" stroke-width="1.2"/>
+            <path d="M30 46 q10 -12 30 -8 q14 4 12 16 q-2 12 -18 14 q-18 2 -24 -10 q-4 -8 0 -12Z" fill="#e8825a"/>
+            <line x1="34" y1="46" x2="60" y2="40" stroke="#c9536a" stroke-width="1" opacity="0.5"/>
+            <line x1="34" y1="52" x2="62" y2="48" stroke="#c9536a" stroke-width="1" opacity="0.5"/>
+            <line x1="36" y1="58" x2="60" y2="56" stroke="#c9536a" stroke-width="1" opacity="0.5"/>
+            <circle cx="68" cy="62" r="9" fill="#f0e08a" stroke="#c9c0af" stroke-width="1"/>
+            <line x1="68" y1="54" x2="68" y2="70" stroke="#e8c96a" stroke-width="1"/>
+            <line x1="60" y1="62" x2="76" y2="62" stroke="#e8c96a" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">سمك السلمون<br>بالليمون</div>
+          <div class="item-price">34 د.ل</div>
+        </div>
+        <p class="item-desc">فيليه سلمون مشوي بصلصة الليمون والزبدة وأعشاب طازجة.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#c9c0af" stroke-width="1.2"/>
+            <path d="M50 50 m-22 0 a22 22 0 1 1 44 0 a16 16 0 1 1 -32 0 a10 10 0 1 1 20 0 a4 4 0 1 1 -8 0" fill="none" stroke="#f0e6d3" stroke-width="6" stroke-linecap="round"/>
+            <ellipse cx="38" cy="42" rx="5" ry="3.4" fill="#c9a878"/>
+            <ellipse cx="60" cy="60" rx="5" ry="3.4" fill="#c9a878"/>
+            <ellipse cx="62" cy="38" rx="4" ry="2.8" fill="#c9a878"/>
+            <circle cx="38" cy="42" r="1" fill="#8a6f4a"/>
+            <circle cx="60" cy="60" r="1" fill="#8a6f4a"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">باستا الكريمة<br>بالفطر</div>
+          <div class="item-price">22 د.ل</div>
+        </div>
+        <p class="item-desc">باستا طازجة بصلصة كريمية غنية بالفطر والبارميزان.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#c9c0af" stroke-width="1.2"/>
+            <ellipse cx="46" cy="54" rx="22" ry="12" fill="#c9536a" opacity="0.7"/>
+            <ellipse cx="40" cy="46" rx="9" ry="6" fill="#8a5a2c"/>
+            <ellipse cx="54" cy="50" rx="9" ry="6" fill="#8a5a2c"/>
+            <ellipse cx="46" cy="58" rx="9" ry="6" fill="#8a5a2c"/>
+            <circle cx="70" cy="42" r="2" fill="#f8f4e8"/><circle cx="74" cy="46" r="2" fill="#f8f4e8"/><circle cx="70" cy="50" r="2" fill="#f8f4e8"/><circle cx="66" cy="46" r="2" fill="#f8f4e8"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">كفتة مشوية<br>بالصلصة</div>
+          <div class="item-price">24 د.ل</div>
+        </div>
+        <p class="item-desc">كرات لحم مشوية تُقدَّم مع صلصة طماطم بيتية وأرز.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#c9c0af" stroke-width="1.2"/>
+            <defs><radialGradient id="g-risotto" cx="35%" cy="25%" r="80%"><stop offset="0%" stop-color="#fdfcfa"/><stop offset="100%" stop-color="#e3d4b0" stop-opacity="0"/></radialGradient></defs>
+            <circle cx="50" cy="52" r="26" fill="#f0e6d3"/>
+            <circle cx="50" cy="52" r="26" fill="url(#g-risotto)" opacity="0.5"/>
+            <circle cx="42" cy="46" r="1" fill="#c9a866"/><circle cx="50" cy="42" r="1" fill="#c9a866"/><circle cx="58" cy="48" r="1" fill="#c9a866"/><circle cx="46" cy="56" r="1" fill="#c9a866"/><circle cx="56" cy="58" r="1" fill="#c9a866"/>
+            <ellipse cx="48" cy="50" rx="4" ry="2" fill="#3a2117"/>
+            <ellipse cx="58" cy="54" rx="3.4" ry="1.8" fill="#3a2117"/>
+            <ellipse cx="42" cy="58" rx="3" ry="1.6" fill="#3a2117"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">ريزوتو بالكمأة</div>
+          <div class="item-price">26 د.ل</div>
+        </div>
+        <p class="item-desc">أرز إيطالي كريمي منقوع بنكهة الكمأة الفاخرة والبارميزان.</p>
+      </div>
+
+      <div class="dish">
+        <span class="badge">الأكثر طلبًا</span>
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#c9c0af" stroke-width="1.2"/>
+            <defs><radialGradient id="g-steak" cx="30%" cy="25%" r="80%"><stop offset="0%" stop-color="#8a5a3a"/><stop offset="100%" stop-color="#5c3620" stop-opacity="0"/></radialGradient></defs>
+            <path d="M32 42 q10 -14 30 -10 q16 4 12 20 q-4 16 -22 16 q-18 0 -22 -12 q-2 -8 2 -14Z" fill="#5c3620"/>
+            <path d="M32 42 q10 -14 30 -10 q16 4 12 20 q-4 16 -22 16 q-18 0 -22 -12 q-2 -8 2 -14Z" fill="url(#g-steak)" opacity="0.5"/>
+            <line x1="36" y1="44" x2="58" y2="34" stroke="#2c1a10" stroke-width="1.4" opacity="0.6"/>
+            <line x1="38" y1="52" x2="62" y2="42" stroke="#2c1a10" stroke-width="1.4" opacity="0.6"/>
+            <line x1="40" y1="60" x2="62" y2="52" stroke="#2c1a10" stroke-width="1.4" opacity="0.6"/>
+            <circle cx="72" cy="62" r="4" fill="#e3c69c"/><circle cx="78" cy="58" r="3.4" fill="#e3c69c"/>
+            <path d="M70 44 q6 -4 10 2" stroke="#5c7a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">ستيك لحم بقري</div>
+          <div class="item-price">38 د.ل</div>
+        </div>
+        <p class="item-desc">قطعة لحم بقري مشوية على الفحم، تُقدَّم مع خضار موسمية.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ DESSERTS ============ -->
+  <section class="menu-section" id="sec-desserts">
+    <div class="section-head" style="--cat:var(--cat-desserts)">
+      <h2 class="section-title">حلويات</h2>
+      <p class="section-sub">تُحضّر يوميًا بمكونات طازجة</p>
+    </div>
+    <div class="dish-grid">
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><path d="M32 30 L68 30 L64 82 L36 82 Z" fill="none" stroke="#c9c0af" stroke-width="1.6"/><path d="M35 78 L65 78 L63 62 L37 62 Z" fill="#d8b98f"/><path d="M36 60 L64 60 L62.5 46 L37.5 46 Z" fill="#eee0c8"/><path d="M37.5 44 L62.5 44 L61 32 L39 32 Z" fill="#d8b98f"/><path d="M34 28 C40 20 60 20 66 28 C60 26 40 26 34 28 Z" fill="#fbf7ee"/><circle cx="44" cy="24" r="3" fill="#b23a4e"/><circle cx="50" cy="21" r="3" fill="#b23a4e"/><circle cx="56" cy="24" r="3" fill="#b23a4e"/><path d="M50 18 q3 -4 6 -1" stroke="#5c7a4a" stroke-width="1.4" fill="none"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">بارفيه الفانيليا<br>والتوت</div>
+          <div class="item-price">18 د.ل</div>
+        </div>
+        <p class="item-desc">طبقات من الكريمة والبسكويت مع توت طازج وصوص فانيليا.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><ellipse cx="50" cy="70" rx="26" ry="7" fill="#d8b98f"/><ellipse cx="50" cy="61" rx="25" ry="7" fill="#e3c69c"/><ellipse cx="50" cy="52" rx="24" ry="7" fill="#d8b98f"/><ellipse cx="50" cy="43" rx="23" ry="7" fill="#ecd2a9"/><path d="M30 40 C40 34 60 34 70 40" stroke="#fbf7ee" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="40" cy="36" r="2.6" fill="#37455c"/><circle cx="47" cy="33" r="2.6" fill="#37455c"/><circle cx="54" cy="36" r="2.6" fill="#37455c"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">بان كيك بالفانيليا</div>
+          <div class="item-price">14 د.ل</div>
+        </div>
+        <p class="item-desc">بان كيك طري محلّى بالفانيليا مع شراب القيقب والتوت الأزرق.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><rect x="28" y="40" width="44" height="26" rx="2" fill="#c9862f"/><rect x="28" y="40" width="44" height="26" rx="2" fill="url(#brulee)" opacity="0.55"/><defs><radialGradient id="brulee" cx="30%" cy="30%" r="80%"><stop offset="0%" stop-color="#5c3a15"/><stop offset="100%" stop-color="#c9862f" stop-opacity="0"/></radialGradient></defs><circle cx="38" cy="47" r="2" fill="#5c3a15" opacity="0.5"/><circle cx="55" cy="50" r="1.6" fill="#5c3a15" opacity="0.5"/><circle cx="62" cy="44" r="1.8" fill="#5c3a15" opacity="0.5"/><line x1="76" y1="38" x2="80" y2="70" stroke="#2c2117" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">كريم بروليه<br>بالفانيليا</div>
+          <div class="item-price">16 د.ل</div>
+        </div>
+        <p class="item-desc">كسترد كريمي طري بقشرة كراميل مقرمشة من الأعلى.</p>
+      </div>
+
+      <div class="dish">
+        <span class="badge">الأكثر طلبًا</span>
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><path d="M34 30 L66 30 L63 78 L37 78 Z" fill="none" stroke="#c9c0af" stroke-width="1.6"/><path d="M36.5 76 L63.5 76 L61.5 55 L38.5 55 Z" fill="#c99a63"/><path d="M37.5 54 L62.5 54 L61 34 L39 34 Z" fill="#f0e6d3"/><circle cx="42" cy="40" r="1.4" fill="#8a5a2c"/><circle cx="50" cy="37" r="1.4" fill="#8a5a2c"/><circle cx="58" cy="41" r="1.4" fill="#8a5a2c"/><circle cx="46" cy="45" r="1.4" fill="#8a5a2c"/><circle cx="55" cy="46" r="1.4" fill="#8a5a2c"/><line x1="24" y1="70" x2="34" y2="66" stroke="#8a5a2c" stroke-width="3" stroke-linecap="round"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">تيراميسو<br>بالزنجبيل</div>
+          <div class="item-price">17 د.ل</div>
+        </div>
+        <p class="item-desc">طبقات قهوة وكريمة ماسكربوني بلمسة زنجبيل دافئة.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><path d="M30 78 L70 78 L58 26 L42 26 Z" fill="none" stroke="#c9c0af" stroke-width="1.4"/><path d="M32 76 L68 76 L64 64 L36 64 Z" fill="#f4ede0"/><path d="M35 62 L65 62 L62.5 50 L37.5 50 Z" fill="#f4ede0"/><path d="M38 48 L62 48 L59.5 30 L40.5 30 Z" fill="#f4ede0"/><rect x="34.5" y="62" width="31" height="2.5" fill="#c9536a"/><rect x="37" y="48" width="26" height="2.5" fill="#c9536a"/><circle cx="44" cy="27" r="2.6" fill="#b23a4e"/><circle cx="50" cy="25" r="2.6" fill="#b23a4e"/><circle cx="56" cy="27" r="2.6" fill="#b23a4e"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">كيك التوت البري<br>بالشوكولاتة البيضاء</div>
+          <div class="item-price">19 د.ل</div>
+        </div>
+        <p class="item-desc">كيك إسفنجي طري بحشوة توت بري وكريمة شوكولاتة بيضاء.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><ellipse cx="50" cy="66" rx="30" ry="12" fill="none" stroke="#c9c0af" stroke-width="1.4"/><ellipse cx="46" cy="62" rx="20" ry="8" fill="#5c3620"/><path d="M34 60 C38 46 54 46 58 60 C54 66 38 66 34 60Z" fill="#8a5a2c"/><circle cx="66" cy="58" r="9" fill="#f4ede0"/><path d="M64 50 q2 -6 4 0" stroke="#5c7a4a" stroke-width="1.4" fill="none"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">بودينغ التوفي<br>اللاصق</div>
+          <div class="item-price">15 د.ل</div>
+        </div>
+        <p class="item-desc">كيك دافئ بصوص التوفي الغني، يُقدَّم مع كرة آيس كريم.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ JUICES ============ -->
+  <section class="menu-section" id="sec-juices">
+    <div class="section-head" style="--cat:var(--cat-juices)">
+      <h2 class="section-title">عصائر</h2>
+      <p class="section-sub">تُعصر طازجة عند الطلب</p>
+    </div>
+    <div class="dish-grid">
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><path d="M38 28 L62 28 L58 76 L42 76 Z" fill="none" stroke="#c9c0af" stroke-width="1.6"/><path d="M40 40 L60 40 L57 74 L43 74 Z" fill="#e8935a"/><ellipse cx="50" cy="40" rx="10" ry="3" fill="#f3b581"/><line x1="55" y1="22" x2="49" y2="46" stroke="#d9d0bd" stroke-width="2" stroke-linecap="round"/><circle cx="68" cy="34" r="9" fill="#f0a862" stroke="#c9c0af" stroke-width="1"/><line x1="68" y1="26" x2="68" y2="42" stroke="#e8935a" stroke-width="1"/><line x1="60" y1="34" x2="76" y2="34" stroke="#e8935a" stroke-width="1"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">عصير برتقال<br>طازج</div>
+          <div class="item-price">9 د.ل</div>
+        </div>
+        <p class="item-desc">يُعصر طازجًا يوميًا بدون إضافات أو سكر مضاف.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><path d="M38 28 L62 28 L58 76 L42 76 Z" fill="none" stroke="#c9c0af" stroke-width="1.6"/><path d="M40 40 L60 40 L57 74 L43 74 Z" fill="#e2536a"/><ellipse cx="50" cy="40" rx="10" ry="3" fill="#ea7a8d"/><line x1="55" y1="22" x2="49" y2="46" stroke="#d9d0bd" stroke-width="2" stroke-linecap="round"/><circle cx="65" cy="60" r="1.4" fill="#2c2117"/><circle cx="70" cy="55" r="1.4" fill="#2c2117"/><circle cx="67" cy="66" r="1.4" fill="#2c2117"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">عصير بطيخ<br>منعش</div>
+          <div class="item-price">8 د.ل</div>
+        </div>
+        <p class="item-desc">بطيخ بارد ومنعش، مثالي في الأجواء الحارة.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><path d="M38 28 L62 28 L58 76 L42 76 Z" fill="none" stroke="#c9c0af" stroke-width="1.6"/><path d="M40 40 L60 40 L57 74 L43 74 Z" fill="#d9df8a"/><ellipse cx="50" cy="40" rx="10" ry="3" fill="#e5eaa8"/><line x1="55" y1="22" x2="49" y2="46" stroke="#d9d0bd" stroke-width="2" stroke-linecap="round"/><path d="M64 32 q6 -8 12 0 q-6 4 -12 0Z" fill="#5c7a4a"/><circle cx="70" cy="60" r="9" fill="#f3e79a" stroke="#c9c0af" stroke-width="1"/><line x1="70" y1="52" x2="70" y2="68" stroke="#d9df8a" stroke-width="1"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">ليموناضة<br>بالنعناع</div>
+          <div class="item-price">8 د.ل</div>
+        </div>
+        <p class="item-desc">ليمون طازج ونعناع بارد مع لمسة عسل خفيفة.</p>
+      </div>
+
+      <div class="dish">
+        <span class="badge">الأكثر طلبًا</span>
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><path d="M38 28 L62 28 L58 76 L42 76 Z" fill="none" stroke="#c9c0af" stroke-width="1.6"/><path d="M40 40 L60 40 L57 74 L43 74 Z" fill="#f0b429"/><ellipse cx="50" cy="40" rx="10" ry="3" fill="#f5c766"/><line x1="55" y1="22" x2="49" y2="46" stroke="#d9d0bd" stroke-width="2" stroke-linecap="round"/><path d="M64 55 C70 50 78 55 76 63 C72 70 62 68 64 55Z" fill="#e8935a"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">عصير مانجو</div>
+          <div class="item-price">10 د.ل</div>
+        </div>
+        <p class="item-desc">مانجو استوائية طبيعية 100%، سميك وغني بالنكهة.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ COFFEE & HOT DRINKS ============ -->
+  <section class="menu-section" id="sec-coffee">
+    <div class="section-head" style="--cat:var(--cat-coffee)">
+      <h2 class="section-title">مشروبات ساخنة</h2>
+      <p class="section-sub">قهوة مختصة تُحضّر لحظة الطلب</p>
+    </div>
+    <div class="dish-grid">
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><ellipse cx="50" cy="70" rx="26" ry="6" fill="none" stroke="#c9c0af" stroke-width="1.4"/><path d="M38 40 L62 40 L58 68 L42 68 Z" fill="#3a2416"/><path d="M62 46 C72 46 72 60 62 60" fill="none" stroke="#c9c0af" stroke-width="2"/><path d="M45 32 q2 -6 0 -10" stroke="#c9c0af" stroke-width="1.4" fill="none"/><path d="M55 32 q2 -6 0 -10" stroke="#c9c0af" stroke-width="1.4" fill="none"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">إسبريسو</div>
+          <div class="item-price">6 د.ل</div>
+        </div>
+        <p class="item-desc">جرعة قهوة مركزة، غنية القوام وعميقة النكهة.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><ellipse cx="50" cy="76" rx="24" ry="5" fill="none" stroke="#c9c0af" stroke-width="1.4"/><path d="M34 34 L66 34 L61 72 L39 72 Z" fill="#f0e6d3"/><path d="M36.5 40 L63.5 40 L60 68 L40 68 Z" fill="#7a4a26"/><path d="M50 40 C46 48 54 52 50 60" stroke="#f0e6d3" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M66 40 C74 40 74 52 66 52" fill="none" stroke="#c9c0af" stroke-width="2"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">لاتيه</div>
+          <div class="item-price">9 د.ل</div>
+        </div>
+        <p class="item-desc">إسبريسو مع حليب مبخّر وطبقة رغوة ناعمة.</p>
+      </div>
+
+      <div class="dish">
+        <span class="badge">الأكثر طلبًا</span>
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><ellipse cx="50" cy="76" rx="24" ry="5" fill="none" stroke="#c9c0af" stroke-width="1.4"/><path d="M34 34 L66 34 L61 72 L39 72 Z" fill="#f0e6d3"/><path d="M36.5 44 L63.5 44 L60 68 L40 68 Z" fill="#8a5a2c"/><circle cx="44" cy="38" r="1.4" fill="#a8672a"/><circle cx="50" cy="36" r="1.4" fill="#a8672a"/><circle cx="56" cy="38" r="1.4" fill="#a8672a"/><path d="M66 40 C74 40 74 52 66 52" fill="none" stroke="#c9c0af" stroke-width="2"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">كابتشينو</div>
+          <div class="item-price">9 د.ل</div>
+        </div>
+        <p class="item-desc">تركيبة متوازنة من الإسبريسو والحليب والرغوة الكثيفة.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><ellipse cx="50" cy="76" rx="24" ry="5" fill="none" stroke="#c9c0af" stroke-width="1.4"/><path d="M36 32 L64 32 L60 72 L40 72 Z" fill="none" stroke="#c9c0af" stroke-width="1.4"/><path d="M38 40 L62 40 L58.5 70 L41.5 70 Z" fill="#a8c47a" opacity="0.85"/><path d="M50 40 C46 48 54 52 50 60" stroke="#eef0df" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.6"/><path d="M48 34 q6 -8 12 -2 q-6 4 -12 2Z" fill="#5c7a4a"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">شاي أخضر<br>بالنعناع</div>
+          <div class="item-price">7 د.ل</div>
+        </div>
+        <p class="item-desc">أوراق شاي أخضر طازجة مع نعناع عطري، تُقدَّم ساخنة.</p>
+      </div>
+
+      <div class="dish">
+        <div class="plate-shadow"></div>
+        <div class="plate">
+          <svg viewBox="0 0 100 100"><ellipse cx="50" cy="76" rx="24" ry="5" fill="none" stroke="#c9c0af" stroke-width="1.4"/><path d="M34 34 L66 34 L61 72 L39 72 Z" fill="#f0e6d3"/><path d="M36.5 58 L63.5 58 L61 70 L39 70 Z" fill="#4a2c18"/><path d="M37.5 46 L62.5 46 L61 58 L39 58 Z" fill="#7a4a26"/><path d="M50 40 C46 44 54 46 50 50" stroke="#c9a878" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M66 40 C74 40 74 52 66 52" fill="none" stroke="#c9c0af" stroke-width="2"/></svg>
+        </div>
+        <div class="label-box">
+          <div class="item-name">موكا بالشوكولاتة</div>
+          <div class="item-price">10 د.ل</div>
+        </div>
+        <p class="item-desc">إسبريسو مع شوكولاتة داكنة وحليب مبخّر ورغوة كريمية.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>هذا نموذج توضيحي فقط &mdash; يمكن استبدال الصور والأسماء والأسعار بسهولة</footer>
 </div>
+
+<script>
+  const navLinks = document.querySelectorAll('.nav-link');
+  const sections = document.querySelectorAll('.menu-section');
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+
+  sections.forEach(sec => navObserver.observe(sec));
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReduced) {
+    const dishes = document.querySelectorAll('.dish');
+    const dishObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          entry.target.style.transitionDelay = (i % 2) * 0.08 + 's';
+          entry.target.classList.add('in-view');
+          dishObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    dishes.forEach(d => dishObserver.observe(d));
+  } else {
+    document.querySelectorAll('.dish').forEach(d => d.classList.add('in-view'));
+  }
+</script>
 </body>
 </html>
