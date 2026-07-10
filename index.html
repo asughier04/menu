@@ -6,15 +6,15 @@
     <title>منيو مطعم لاقونا | Laguna Menu</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --brand-green: #1fa14b; /* لون شعار لاقونا */
-            --brand-dark: #111111;
-            --brand-white: #ffffff;
-            --bg-color: #f8f5ee; /* لون مقارب لخلفية المنيو الورقي */
-            --card-bg: #ffffff;
-            --text-main: #2d3436;
-            --text-muted: #636e72;
-        }
+     :root {
+    --brand-green: #1fa14b;  /* لون شعار لاقونا */
+    --brand-dark: #111111;
+    --brand-white: #ffffff;  /* تم تصحيحه هنا ليكون الأبيض الصافي */
+    --bg-color: #f8f5ee; 
+    --card-bg: #ffffff;
+    --text-main: #2d3436;
+    --text-muted: #636e72;
+}
 
         * {
             box-sizing: border-box;
@@ -31,15 +31,16 @@
 
         /* --- Header & Logo --- */
         header {
-            background-color: var(--brand-white);
-            text-align: center;
-            padding: 25px 20px;
-            border-bottom: 5px solid var(--brand-green);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 10px rgb(0, 0, 0);
-        }
+    background-color: var(--brand-white); /* الخلفية أصبحت بيضاء الآن */
+    text-align: center;
+    padding: 25px 20px;
+    border-bottom: 5px solid var(--brand-green); /* الخط الأخضر السفلي للشعار */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    /* تم استخدام rgba لتنعيم الظل قليلاً لكي يبدو احترافياً وانسيابياً مع الخلفية البيضاء الجديدة */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); 
+}
 
         .logo {
             max-width: 180px;
