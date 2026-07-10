@@ -4,176 +4,335 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منيو مطعم لاقونا | Laguna Menu</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Rakkas&display=swap" rel="stylesheet">
     <style>
-     :root {
-    --brand-green: #1fa14b;  /* لون شعار لاقونا */
-    --brand-dark: #111111;
-    --brand-white: #ffffff;  /* تم تصحيحه هنا ليكون الأبيض الصافي */
-    --bg-color: #f8f5ee; 
-    --card-bg: #ffffff;
-    --text-main: #2d3436;
-    --text-muted: #636e72;
-}
+        :root {
+            --teal-deep: #0a3538;
+            --teal: #0f4548;
+            --green: #1fa14b;
+            --green-deep: #167a39;
+            --sand: #f6f1e3;
+            --sand-dark: #ece3cd;
+            --card: #ffffff;
+            --ink: #182726;
+            --muted: #6d7c7a;
+            --coral: #ff6b4a;
+            --coral-deep: #e6522e;
+            --gold: #cf9a42;
+        }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding-bottom: 50px;
+            background-color: var(--sand);
+            color: var(--ink);
+            padding-bottom: 60px;
+            background-image:
+                radial-gradient(circle at 15% 8%, rgba(31,161,75,0.06), transparent 40%),
+                radial-gradient(circle at 90% 15%, rgba(255,107,74,0.06), transparent 35%);
         }
 
-        /* --- Header & Logo --- */
+        /* --- Header --- */
         header {
-    background-color: var(--brand-white); /* الخلفية أصبحت بيضاء الآن */
-    text-align: center;
-    padding: 15px 10px;
-    border-bottom: 5px solid var(--brand-green); /* الخط الأخضر السفلي للشعار */
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    /* تم استخدام rgba لتنعيم الظل قليلاً لكي يبدو احترافياً وانسيابياً مع الخلفية البيضاء الجديدة */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); 
-}
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(155deg, var(--teal-deep) 0%, var(--teal) 65%, var(--green-deep) 130%);
+            text-align: center;
+            padding: 30px 20px 40px;
+        }
 
-        .logo {
-            max-width: 280px;
-            height: auto;
+        .brand-mark {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .brand-name {
+            font-family: 'Rakkas', serif;
+            font-size: clamp(2.2rem, 8vw, 2.8rem);
+            color: #f6f1e3;
+            letter-spacing: 1px;
+            line-height: 1;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.25);
+        }
+
+        .brand-sub {
+            font-size: 0.72rem;
+            letter-spacing: 4px;
+            color: #a9d8bd;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .brand-rule {
+            width: 46px;
+            height: 3px;
+            background: var(--coral);
+            border-radius: 3px;
+            margin-top: 10px;
+        }
+
+        .header-wave {
+            display: block;
+            width: 100%;
+            height: 34px;
+            margin-bottom: -1px;
+        }
+
+        /* --- Search --- */
+        .search-wrap {
+            max-width: 600px;
+            margin: -22px auto 0;
+            padding: 0 16px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .search-box {
+            width: 100%;
+            background: var(--card);
+            border: none;
+            border-radius: 14px;
+            padding: 14px 46px 14px 16px;
+            font-size: 0.95rem;
+            font-family: 'Cairo', sans-serif;
+            color: var(--ink);
+            box-shadow: 0 8px 20px rgba(10,53,56,0.18);
+            outline: none;
+            transition: box-shadow 0.25s;
+        }
+
+        .search-box:focus {
+            box-shadow: 0 8px 24px rgba(10,53,56,0.28), 0 0 0 2px var(--green);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            opacity: 0.45;
+            pointer-events: none;
         }
 
         /* --- Category Navigation --- */
         .category-nav {
             display: flex;
             overflow-x: auto;
-            background: var(--card-bg);
-            padding: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            gap: 8px;
+            padding: 18px 16px 8px;
+            max-width: 600px;
+            margin: 0 auto;
             scroll-behavior: smooth;
         }
 
-        .category-nav::-webkit-scrollbar {
-            display: none; /* إخفاء شريط التمرير للهواتف */
-        }
+        .category-nav::-webkit-scrollbar { display: none; }
 
         .category-btn {
-            background: var(--bg-color);
-            border: 1px solid #ddd;
-            color: var(--brand-dark);
-            padding: 8px 16px;
-            margin-left: 10px;
-            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--card);
+            border: 1px solid var(--sand-dark);
+            color: var(--teal-deep);
+            padding: 9px 16px;
+            border-radius: 999px;
             white-space: nowrap;
             font-weight: 600;
+            font-size: 0.88rem;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.25s;
+            flex-shrink: 0;
         }
 
+        .category-btn .icon { font-size: 1rem; }
+
         .category-btn.active {
-            background: var(--brand-green);
-            color: white;
-            border-color: var(--brand-green);
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green);
+            box-shadow: 0 6px 14px rgba(31,161,75,0.3);
         }
 
         /* --- Menu Content --- */
         .container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 0 15px;
+            padding: 10px 16px 0;
         }
 
         .category-section {
-            margin-bottom: 35px;
-            display: none; /* سيتم إظهار القسم النشط عبر الجافاسكريبت */
-            animation: fadeIn 0.4s ease-in-out;
+            margin-bottom: 30px;
+            display: none;
+            animation: fadeIn 0.35s ease-in-out;
         }
 
-        .category-section.active {
+        .category-section.active,
+        .category-section.force-show {
             display: block;
         }
 
+        .section-title-row {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--sand-dark);
+        }
+
         .section-title {
-            color: var(--brand-dark);
-            border-bottom: 3px solid var(--brand-green);
-            padding-bottom: 8px;
-            margin-bottom: 15px;
-            font-size: 1.4rem;
-            display: inline-block;
+            font-family: 'Rakkas', serif;
+            color: var(--teal-deep);
+            font-size: 1.55rem;
+        }
+
+        .section-count {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-weight: 600;
+            background: var(--sand-dark);
+            padding: 2px 10px;
+            border-radius: 999px;
+            margin-right: auto;
         }
 
         .menu-item {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 15px;
+            background: var(--card);
+            border-radius: 14px;
+            padding: 16px;
             margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            gap: 12px;
+            box-shadow: 0 2px 10px rgba(10,53,56,0.06);
             border-right: 4px solid transparent;
-            transition: 0.3s;
+            transition: 0.25s;
         }
 
         .menu-item:hover {
-            border-right-color: var(--brand-green);
+            border-right-color: var(--coral);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(10,53,56,0.1);
         }
 
-        .item-info {
-            flex: 1;
-            padding-left: 15px;
-        }
+        .item-info { flex: 1; min-width: 0; }
 
         .item-name {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 700;
             margin-bottom: 4px;
-            color: var(--brand-dark);
+            color: var(--teal-deep);
         }
 
         .item-desc {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.4;
+            font-size: 0.83rem;
+            color: var(--muted);
+            line-height: 1.5;
         }
 
         .item-price {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--brand-green);
-            background: #eafbf0;
-            padding: 5px 12px;
-            border-radius: 6px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--coral-deep);
+            background: #fff0eb;
+            padding: 7px 14px;
+            border-radius: 10px;
             white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .item-price::after {
+            content: ' د.ل';
+            font-size: 0.68rem;
+            font-weight: 600;
+            opacity: 0.75;
+        }
+
+        .no-results {
+            text-align: center;
+            color: var(--muted);
+            padding: 50px 20px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .no-results.show { display: block; }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 24px 16px 6px;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        footer .foot-brand {
+            font-family: 'Rakkas', serif;
+            color: var(--teal-deep);
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 4px;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <img src="logo.png" alt="Laguna Restaurant" class="logo">
+        <div class="brand-mark">
+            <span class="brand-name">لاقونا</span>
+            <span class="brand-sub">LAGUNA RESTAURANT</span>
+            <div class="brand-rule"></div>
+        </div>
+        <!-- لإضافة شعاركم الفعلي: استبدلوا brand-mark أعلاه بـ <img src="اسم-الملف.png" class="logo"> بعد رفع الصورة -->
     </header>
+    <svg class="header-wave" viewBox="0 0 600 34" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0 C100,34 200,0 300,17 C400,34 500,0 600,17 L600,34 L0,34 Z" fill="#f6f1e3"></path>
+    </svg>
+
+    <div class="search-wrap">
+        <input type="text" class="search-box" id="search-input" placeholder="ابحث عن صنف... (بيتزا، برجر، سلطة)">
+        <span class="search-icon">🔍</span>
+    </div>
 
     <nav class="category-nav" id="nav-container"></nav>
 
     <div class="container" id="menu-container"></div>
+    <p class="no-results" id="no-results">لا توجد أصناف مطابقة لبحثك 🍽️</p>
+
+    <footer>
+        <span class="foot-brand">لاقونا</span>
+        بالهناء والشفاء
+    </footer>
 
     <script>
         // --- قاعدة بيانات المنيو ---
-        // يمكنك تعديل الأسعار أو إضافة وحذف الأصناف من هنا بكل سهولة
         const menuData = [
             {
                 category: "بيتزا - حجم كبير",
+                icon: "🍕",
                 items: [
                     { name: "بيتزا مارغريتا", desc: "صلصة + طماطم + جبنة", price: "19" },
                     { name: "بيتزا خضروات", desc: "صلصة فلفل حلو ألوان + طماطم + فقاع", price: "22" },
@@ -189,6 +348,7 @@
             },
             {
                 category: "المعجنات",
+                icon: "🥐",
                 items: [
                     { name: "مقلوبة دجاج", desc: "دجاج + بطاطا + أجبان + صوص + كاتشب", price: "19" },
                     { name: "مقلوبة لحم", desc: "لحم مفروم + بطاطا + أجبان + صوص + كاتشب", price: "20" },
@@ -202,6 +362,7 @@
             },
             {
                 category: "سندوتشات",
+                icon: "🥪",
                 items: [
                     { name: "تشكن فيليه", desc: "شريحة دجاج مشوية + خس + طماطم + صوص", price: "15" },
                     { name: "تشكن لاقونا", desc: "شريحة دجاج مشوية مع قطع الدجاج + الخضار", price: "22" },
@@ -217,6 +378,7 @@
             },
             {
                 category: "سندوتشات VIP",
+                icon: "👑",
                 items: [
                     { name: "تشكن سموكي", desc: "شريحتين دجاج مشوي بخبز التورتيلا + صوص السموكي", price: "22" },
                     { name: "تشكن كرسبي", desc: "شريحتين دجاج كرسبي بخبز التورتيلا يصنع في الفرن", price: "26" },
@@ -225,6 +387,7 @@
             },
             {
                 category: "برجر",
+                icon: "🍔",
                 items: [
                     { name: "كلاسيك برجر لحم", desc: "شريحة لحم + خس + طماطم + صوص جبنة", price: "15" },
                     { name: "برجر دجاج", desc: "شريحة دجاج مفروم + خس + طماطم + صوص", price: "14" },
@@ -236,6 +399,7 @@
             },
             {
                 category: "وجبات مشوية",
+                icon: "🍢",
                 items: [
                     { name: "فيلي دجاج", desc: "2 شريحة دجاج + أرز + بطاطا + سلاطة", price: "32" },
                     { name: "وجبة شيش طاووق", desc: "2 سيخ دجاج + بطاطا + سلاطة", price: "32" },
@@ -249,6 +413,7 @@
             },
             {
                 category: "وجبات كنتاكي وستربس",
+                icon: "🍗",
                 items: [
                     { name: "وجبة كنتاكي 3 قطع", desc: "3 قطع دجاج + أرز + بطاطا + كول سلو + صوص", price: "30" },
                     { name: "وجبة كنتاكي 6 قطع", desc: "6 قطع دجاج + أرز + بطاطا + كول سلو + صوص", price: "55" },
@@ -258,6 +423,7 @@
             },
             {
                 category: "سلطات ومقبلات",
+                icon: "🥗",
                 items: [
                     { name: "شوربة عدس / حلقات بصل", desc: "مقبلات", price: "5" },
                     { name: "بطاطا متوسطة / أصابع الجبنة", desc: "مقبلات", price: "10" },
@@ -271,35 +437,38 @@
 
         const navContainer = document.getElementById('nav-container');
         const menuContainer = document.getElementById('menu-container');
+        const searchInput = document.getElementById('search-input');
+        const noResults = document.getElementById('no-results');
 
-        // بناء الواجهة بناءً على البيانات
         menuData.forEach((categoryData, index) => {
-            // 1. إنشاء أزرار التصنيفات
             const btn = document.createElement('button');
             btn.className = `category-btn ${index === 0 ? 'active' : ''}`;
-            btn.innerText = categoryData.category;
+            btn.innerHTML = `<span class="icon">${categoryData.icon}</span><span>${categoryData.category}</span>`;
             btn.onclick = () => showCategory(index);
             navContainer.appendChild(btn);
 
-            // 2. إنشاء أقسام المنيو
             const section = document.createElement('div');
             section.className = `category-section ${index === 0 ? 'active' : ''}`;
             section.id = `section-${index}`;
-            
-            const title = document.createElement('h2');
-            title.className = 'section-title';
-            title.innerText = categoryData.category;
-            section.appendChild(title);
+
+            const titleRow = document.createElement('div');
+            titleRow.className = 'section-title-row';
+            titleRow.innerHTML = `
+                <h2 class="section-title">${categoryData.icon} ${categoryData.category}</h2>
+                <span class="section-count">${categoryData.items.length} صنف</span>
+            `;
+            section.appendChild(titleRow);
 
             categoryData.items.forEach(item => {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'menu-item';
+                itemDiv.dataset.search = (item.name + ' ' + item.desc).toLowerCase();
                 itemDiv.innerHTML = `
                     <div class="item-info">
                         <h3 class="item-name">${item.name}</h3>
                         <p class="item-desc">${item.desc}</p>
                     </div>
-                    <div class="item-price">${item.price} د.ل</div>
+                    <div class="item-price">${item.price}</div>
                 `;
                 section.appendChild(itemDiv);
             });
@@ -307,17 +476,46 @@
             menuContainer.appendChild(section);
         });
 
-        // دالة التبديل بين الأقسام
         function showCategory(activeIndex) {
-            // تحديث الأزرار
             document.querySelectorAll('.category-btn').forEach((btn, idx) => {
                 btn.classList.toggle('active', idx === activeIndex);
             });
-            // تحديث الأقسام المعروضة
             document.querySelectorAll('.category-section').forEach((section, idx) => {
                 section.classList.toggle('active', idx === activeIndex);
             });
         }
+
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.trim().toLowerCase();
+            const sections = document.querySelectorAll('.category-section');
+            const navButtons = document.querySelectorAll('.category-btn');
+
+            if (query === '') {
+                navContainer.style.display = 'flex';
+                sections.forEach(s => s.classList.remove('force-show'));
+                document.querySelectorAll('.menu-item').forEach(i => i.style.display = 'flex');
+                const activeIdx = [...navButtons].findIndex(b => b.classList.contains('active'));
+                showCategory(activeIdx >= 0 ? activeIdx : 0);
+                noResults.classList.remove('show');
+                return;
+            }
+
+            navContainer.style.display = 'none';
+            let totalMatches = 0;
+
+            sections.forEach(section => {
+                let matchesInSection = 0;
+                section.querySelectorAll('.menu-item').forEach(item => {
+                    const match = item.dataset.search.includes(query);
+                    item.style.display = match ? 'flex' : 'none';
+                    if (match) { matchesInSection++; totalMatches++; }
+                });
+                section.classList.toggle('force-show', matchesInSection > 0);
+                section.classList.remove('active');
+            });
+
+            noResults.classList.toggle('show', totalMatches === 0);
+        });
     </script>
 </body>
 </html>
